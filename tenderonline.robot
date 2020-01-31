@@ -704,7 +704,7 @@ Get Last Feature Index
 Завантажити документ
   [Arguments]  ${username}  ${filepath}  ${tender_uaid}
   Switch Browser  ${username}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Scroll To Element  xpath=//*[@data-test-id="tender.documents.upload"]/descendant::input[@type="file"][last()]
   Choose File  xpath=//*[@data-test-id="tender.documents.upload"]/descendant::input[@type="file"][last()]  ${filepath}
@@ -762,17 +762,17 @@ Go To And Assert
 
 Оновити сторінку з тендером
   [Arguments]  ${username}  ${tenderID}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tenderID}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tenderID}
 
  tenderonline.Перевести тендер на статус очікування обробки мостом
   [Arguments]  ${username}  ${tender_uaid}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element  xpath=//*[@class="mk-btn mk-btn_danger"]/ancestor::div[@class="text-center"]
   Wait Until Keyword Succeeds  5x  1s   Page Should Contain  Очікування 2-го етапу
 
  tenderonline.Отримати тендер другого етапу та зберегти його
   [Arguments]  ${username}  ${tender_uaid}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid[0:-2]}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid[0:-2]}
 #  Capture Page Screenshot  filename=selenium-screenshot-{}.png
   Click Element  xpath=//*[@class="mk-btn mk-btn_accept"]
   Wait Until Keyword Succeeds  5x  10s   Run Keywords
@@ -801,7 +801,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
   [Arguments]  ${username}  ${tenderID}  ${field_name}  ${field_value}
   ${field_value}=  Run Keyword If  "amount" in "${field_name}"  add_second_sign_after_point  ${field_value}
   ...  ELSE  Set Variable  ${field_value}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tenderID}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tenderID}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Run Keyword If  "Date" in "${field_name}"  Input Date  name="Tender[${field_name.replace(".", "][")}]"  ${field_value}
   ...  ELSE  Input text  name=Tender[${field_name}]  ${field_value}
@@ -812,7 +812,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}  ${field_name}  ${field_value}
   ${field_value}=  Run Keyword If  "amount" in "${field_name}"  add_second_sign_after_point  ${field_value}
   ...  ELSE  Set Variable  ${field_value}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Input Text  xpath=(//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lots_marker"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")])[1]  ${field_value}
   Дочекатися І Клікнути  xpath=//button[contains(@class,'btn_submit_form')]
@@ -820,7 +820,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Завантажити документ в лот
   [Arguments]  ${username}  ${filepath}  ${tender_uaid}  ${lot_id}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Sleep  5  # !!Teprorary!! At slow environment or Chrome 59 + chromedriver 2.32, JS does not have time to index Inputs
   Wait Until Page Contains Element  xpath=//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lots_marker"]/descendant::input[@type="file"][last()]
@@ -836,7 +836,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Створити лот із предметом закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${lot}  ${item}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Дочекатися І Клікнути  xpath=//button[contains(@class, "add_lot")]
 tenderonline.Створити лот  ${username}  ${tender_uaid}  ${lot}  ${item}
@@ -845,16 +845,16 @@ tenderonline.Створити лот  ${username}  ${tender_uaid}  ${lot}  ${ite
 
 Додати предмет закупівлі в лот
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}  ${item}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Дочекатися І Клікнути  xpath=//*[contains(@value, "${lot_id}")]/ancestor::div[@class="lot"]/descendant::button[contains(@class,"add_item")]
-tenderonline.Додати предмет  ${item}
+  tenderonline.Додати предмет  ${item}
   Дочекатися І Клікнути  xpath=//button[contains(@class,'btn_submit_form')]
   Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
 
 Додати донора
   [Arguments]  ${username}  ${tender_uaid}  ${funders_data}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Click Element  id=funders-checkbox
   Wait And Select From List By Label  id=tender-funders  ${funders_data.name}
@@ -864,7 +864,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Додати неціновий показник на тендер
   [Arguments]  ${username}  ${tender_uaid}  ${feature}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Sleep  2
   Дочекатися І Клікнути   xpath=(//div[contains(@class,"features_wrapper")]/descendant::button[contains(@class, "add_feature")])[last()]
@@ -874,7 +874,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Додати неціновий показник на лот
   [Arguments]  ${username}  ${tender_uaid}  ${feature}  ${lot_id}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Sleep  3
   Дочекатися І Клікнути   xpath=(//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lot"]/descendant::button[contains(@class, "add_feature")])[last()]
@@ -884,7 +884,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Додати неціновий показник на предмет
   [Arguments]  ${username}  ${tender_uaid}  ${feature}  ${item_id}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   ${is_feature_added}=  Run Keyword And Return Status  Should Contain At Least One Feature
   Run Keyword If  ${is_feature_added}  Wait Until Keyword Succeeds  10 x  400 ms  Feature Count Should Not Be Zero
@@ -903,7 +903,7 @@ Feature Count Should Not Be Zero
 
 Створити постачальника, додати документацію і підтвердити його
   [Arguments]  ${username}  ${tender_uaid}  ${supplier_data}  ${document}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[text()="Пропозиції"]
   Wait And Select From List By Label  name=Award[suppliers][0][address][countryName]  ${supplier_data.data.suppliers[0].address.countryName}
   Wait And Select From List By Value  name=Award[suppliers][0][identifier][scheme]  ${supplier_data.data.suppliers[0].identifier.scheme}
@@ -937,7 +937,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Видалити предмет закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${lot_id}=${Empty}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Дочекатися І Клікнути  xpath=//textarea[contains(text(), "${item_id}")]/ancestor::div[@class="item"]/descendant::button[contains(@class, "delete_item")]
   Confirm Action
@@ -947,7 +947,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Видалити лот
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Sleep  3
   Дочекатися І Клікнути  xpath=//*[contains(@value, "${lot_id}")]/ancestor::div[@class="lot"]/descendant::button[contains(@class,"delete_lot")]
@@ -957,7 +957,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Видалити неціновий показник
   [Arguments]  ${username}  ${tender_uaid}  ${feature_id}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Sleep  3
   Дочекатися І Клікнути  xpath=//*[contains(@value, "${feature_id}")]/ancestor::div[@class="feature"]/descendant::button[contains(@class,"delete_feature")]
@@ -967,7 +967,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Видалити донора
   [Arguments]  ${username}  ${tender_uaid}  ${funders_index}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Sleep  3
   Дочекатися І Клікнути  xpath=//*[@id="funders-checkbox"]
@@ -980,7 +980,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Задати питання
   [Arguments]  ${username}  ${tender_uaid}  ${question}  ${related_to}=False
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/questions")]
   Input Text  name=Question[title]  ${question.data.title}
   Input Text  name=Question[description]  ${question.data.description}
@@ -991,7 +991,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Відповісти на питання
   [Arguments]  ${username}  ${tender_uaid}  ${answer_data}  ${question_id}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/questions")]
   Toggle Sidebar
   Run Keyword And Ignore Error  Click Element  xpath=//button[@data-dismiss="modal"]
@@ -1023,7 +1023,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Створити вимогу про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${document}=${None}  ${related_to}=Тендеру
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/complaints")]
   Toggle Sidebar
   Wait Until Keyword Succeeds  10 x  400 ms  Run Keywords
@@ -1048,7 +1048,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Підтвердити вирішення вимоги про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${confirmation_data}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/complaints")]
   Run Keyword If  ${confirmation_data.data.satisfied}  Дочекатися І Клікнути  xpath=//button[@name="complaint_resolved"]
   ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="claim_satisfied_false"]
@@ -1062,23 +1062,23 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Підтвердити вирішення вимоги про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${confirmation_data}
-tenderonline.Підтвердити вирішення вимоги про виправлення умов закупівлі  ${username}  ${tender_uaid}  ${complaintID}  ${confirmation_data}
+  tenderonline.Підтвердити вирішення вимоги про виправлення умов закупівлі  ${username}  ${tender_uaid}  ${complaintID}  ${confirmation_data}
 
 Відповісти на вимогу про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
-tenderonline.Відповісти на вимогу  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
+  tenderonline.Відповісти на вимогу  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
 
 Відповісти на вимогу про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
-tenderonline.Відповісти на вимогу  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
+  tenderonline.Відповісти на вимогу  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
 
 Відповісти на вимогу про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}  ${award_index}
-tenderonline.Відповісти на вимогу  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
+  tenderonline.Відповісти на вимогу  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
 
 Відповісти на вимогу
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If  "переможця" in "${TEST_NAME}"  Run Keywords
   ...    Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   ...    AND  Дочекатися І Клікнути  xpath=//*[@class="page-panel"]/descendant::a[contains(@href,"tender/qualification-complaints")]
@@ -1120,7 +1120,7 @@ tenderonline.Скасувати вимогу про виправлення ум�
 
 Перетворити вимогу про виправлення умов закупівлі в скаргу
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If  "переможця" in "${TEST_NAME}"  Run Keywords
   ...    Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   ...    AND  Дочекатися І Клікнути  xpath=//*[@class="page-panel"]/descendant::a[contains(@href,"tender/qualification-complaints")]
@@ -1131,11 +1131,11 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Перетворити вимогу про виправлення умов лоту в скаргу
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}
-tenderonline.Перетворити вимогу про виправлення умов закупівлі в скаргу  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}
+  tenderonline.Перетворити вимогу про виправлення умов закупівлі в скаргу  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}
 
 Створити вимогу про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${award_index}  ${document}=${None}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Toggle Sidebar
 #  Дочекатися І Клікнути  xpath=//a[contains(@href,"tender/qualification")]
@@ -1158,7 +1158,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
  tenderonline.Створити скаргу про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${award_index}  ${document}=${None}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Toggle Sidebar
   Дочекатися І Клікнути  xpath=(//a[contains(@href,"tender/qualification-complaints")])[last()]
@@ -1178,7 +1178,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Підтвердити вирішення вимоги про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${confirmation_data}  ${award_index}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Дочекатися І Клікнути  xpath=//div[@data-test-id="awards.complaintPeriod.endDate"]/preceding-sibling::a[contains(@href,"tender/qualification-complaints")]
   Дочекатися І Клікнути  xpath=//button[@name="award_claim_resolved"]
@@ -1191,7 +1191,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Скасувати вимогу про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${cancellation_data}  ${award_index}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Дочекатися І Клікнути  xpath=//div[@data-test-id="awards.complaintPeriod.endDate"]/preceding-sibling::a[contains(@href,"tender/qualification-complaints")]
   Select Checkbox  xpath=//*[contains(text(),"${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@class="cancel_checkbox"]
@@ -1200,7 +1200,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Перетворити вимогу про виправлення визначення переможця в скаргу
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}  ${award_index}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If  "переможця" in "${TEST_NAME}"  Run Keywords
   ...    Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   ...    AND  Дочекатися І Клікнути  xpath=//*[@class="page-panel"]/descendant::a[contains(@href,"tender/qualification-complaints")]
@@ -1215,14 +1215,14 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Отримати інформацію із тендера
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${red}=  Evaluate  "\\033[1;31m"
   ${index}=  Set Variable   ${field_name.split('[')[1].split(']')[0]}
   Run Keyword If  'title' in '${field_name}'  Execute Javascript  $("[data-test-id|='title']").css("text-transform", "unset")
   Run Keyword If  'status' in '${field_name}'  Дочекатися І Клікнути  xpath=//*[contains(@href,"test-tenders.all.biz/tender/json/")]
 #  Run Keyword And Ignore Error  Click Element  xpath=//button[@data-dismiss="modal"]
   Run Keyword If  '${field_name}' == 'qualificationPeriod.endDate'  Wait Until Keyword Succeeds  10 x  60 s  Run Keywords
-  ...tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  ...  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ...  AND  Page Should Contain Element  xpath=//*[@data-test-id="qualificationPeriod.endDate"]
   ${value}=  Run Keyword If  'unit.code' in '${field_name}'  Log To Console   ${red}\n\t\t\t Це поле не виводиться на  tenderonline
   ...  ELSE IF  'qualifications' in '${field_name}'  Отримати інформацію із кваліфікації  ${username}  ${tender_uaid}  ${field_name}
@@ -1324,7 +1324,7 @@ Get info from funders
 
 Отримати інформацію із запитання
   [Arguments]  ${username}  ${tender_uaid}  ${question_id}  ${field_name}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/questions")]
   Wait Until Element Is Not Visible  xpath=//*[@data-test-id="items.description"]
   Wait Until Keyword Succeeds  5 x  60 s  Run Keywords
@@ -1337,7 +1337,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 Отримати інформацію із скарги
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${field_name}  ${award_index}=${None}
   Run keyword If  '${field_name}' == 'status' and '${ROLE}' == 'viewer'  Sleep  120
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If  "ignored" in "${TEST_NAME}"  Run Keywords
   ...    Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   ...    AND  Дочекатися І Клікнути  xpath=//*[@class="page-panel"]/descendant::a[contains(@href,"tender/qualification-complaints")]
@@ -1355,7 +1355,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Отримати інформацію із документа до скарги
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${doc_id}  ${field_name}  ${award_id}=${None}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Run Keyword If  "переможця" in "${TEST_NAME}"  Run Keywords
   ...    Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   ...    AND  Дочекатися І Клікнути  xpath=//*[@class="page-panel"]/descendant::a[contains(@href,"tender/qualification-complaints")]
@@ -1365,14 +1365,14 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 
 Отримати документ до скарги
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${doc_id}  ${award_id}=${None}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/complaints")]
   ${value}=tenderonline.Отримати документ   ${username}  ${tender_uaid}  ${doc_id}
   [Return]  ${value}
 
 Отримати інформацію із пропозиції
   [Arguments]  ${username}  ${tender_uaid}  ${field}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Run Keyword If  '${mode}' == 'open_esco'  Sleep  700
   ...  ELSE  Sleep  500
   Дочекатися І Клікнути  xpath=//*[contains(@href,"test-tenders.all.biz/tender/json/")]
@@ -1385,7 +1385,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 
 Отримати інфорцію про замовника
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${address}=  Run Keyword If  "address" in "${field_name}"  Get Text  xpath=//*[@data-test-id="procuringEntity.address"]
   ${value}=  Set Variable If  "procuringEntity.address.countryName" in "${field_name}"  ${address.split(" ")[0]}
   ...  "procuringEntity.address.locality" in "${field_name}"  ${address.split(" ")[2]}
@@ -1396,7 +1396,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 
 Отримати інформацію із кваліфікації
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${index_str}=  Set Variable  ${field_name[15]}
   ${index_int}=  Convert To Integer  ${index_str}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/euprequalification")]
@@ -1405,7 +1405,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 
 Отримати інформацію із аварду
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   ...  ELSE  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
@@ -1431,7 +1431,7 @@ Get Info From Complaints
 
 Отримати статус контракта
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   ...  ELSE  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
@@ -1457,7 +1457,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
   ${selfeligible_status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${bid.data}  selfEligible
   ${selfqualified_status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${bid.data}  selfQualified
   ${lots_status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${bid.data}  lotValues
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Sleep  2
   Run Keyword If  ${lots_status}  Ввести пропозицію для лотової зкупівлі  ${bid}
   ...  ELSE  ConvToStr And Input Text  name=Bid[value][amount]  ${bid.data.value.amount}
@@ -1535,13 +1535,13 @@ Add annual costs reduction
 Скасувати цінову пропозицію
   \  ${value}=  Convert To Integer  ${bid.data.parameters[${feature_index}]["value"]}
   [Arguments]  ${username}  ${tender_uaid}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Execute Javascript  window.confirm = function(msg) { return true; }
   Дочекатися І Клікнути  xpath=//button[@name="delete_bids"]
 
 Змінити цінову пропозицію
   [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Run Keyword If  "${fieldname}" == "status"  Wait Until Keyword Succeeds  20 x  10 s  Run Keywords
   ...  Дочекатися І Клікнути  xpath=//*[contains(@href,"test-tenders.all.biz/tender/json/")]
   ...  AND  Page Should Contain Element  xpath=//span[@class="label label-danger"][contains(text(),"Недійсна")] /ancestor::div[@class="pull-right"]
@@ -1564,7 +1564,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
   [Arguments]  ${username}  ${path}  ${tender_uaid}  ${doc_name}=documents  ${doc_type}=technicalSpecifications
   ${doc_type}=  Set Variable If  '${doc_type}' == 'None'  technicalSpecifications  ${doc_type}
   ${doc_type}=  Set Variable If  '${doc_type}' == 'winningBid'  technicalSpecifications  ${doc_type}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Scroll To Element  xpath=(//input[@type="file"])[last()]
   Choose File  xpath=(//input[@type="file"])[last()]  ${path}
   ${full_doc_name}=  Set Variable  ${path.split('/')[-1]}
@@ -1588,7 +1588,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 
 Змінити документацію в ставці
   [Arguments]  ${username}  ${tender_uaid}  ${doc_data}  ${doc_id}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=(//*[@class="confidentiality"])[last()]/..
   Input Text  xpath=(//textarea[contains(@name,"confidentialityRationale")])[last()]  ${doc_data.data.confidentialityRationale}
   Подати Пропозицію Без Накладення ЕЦП
@@ -1600,7 +1600,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 
 Завантажити документ у кваліфікацію
   [Arguments]  ${username}  ${document}  ${tender_uaid}  ${qualification_num}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${qualification_num}=  Convert To Integer  ${qualification_num}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/euprequalification")]
   Click Element  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[contains(@id,"modal-qualification-button")]
@@ -1610,7 +1610,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 Завантажити документ рішення кваліфікаційної комісії
   [Arguments]  ${username}  ${document}  ${tender_uaid}  ${award_num}
   ${award_num}=  Convert To Integer  ${award_num}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Дочекатися І Клікнути  xpath=//*[contains(@id,"modal-award-qualification-button")]
   Wait Element Animation  xpath=//*[@class="h2 text-center"]
@@ -1671,7 +1671,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 Відхилити кваліфікацію
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
   ${qualification_num}=  Convert To Integer  ${qualification_num}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
   Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")]
   ...  ELSE  Дочекатися І Клікнути  xpath=(//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")])[${qualification_num + 1}]
@@ -1687,7 +1687,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Скасувати кваліфікацію
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${qualification_num}=  Convert To Integer  ${qualification_num}
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
   Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[2]
@@ -1696,7 +1696,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 
  tenderonline.Скасування рішення кваліфікаційної комісії
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${is_award}=  Run Keyword And Return Status  Page Should Contain  Визначення переможців
 #  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_danger btn-award"]
 #  Wait Element Animation  xpath//div[@class="modal-footer"][2]
@@ -1746,7 +1746,7 @@ Disqualification of the first winner
 
 Затвердити остаточне рішення кваліфікації
   [Arguments]  ${username}  ${tender_uaid}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
 #  Run Keyword If  '${MODE}' != 'belowThreshold'  Run Keywords
 #  Run Keyword If  '${MODE}' == 'open_competitive_dialogue'  Дочекатися І Клікнути  xpath=//
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/euprequalification")]
@@ -1757,7 +1757,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
   [Arguments]  ${username}  ${tender_uaid}  ${contract_num}
   Sleep  60
   ${document}=  get_upload_file_path
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Wait Until Keyword Succeeds  5 x  0.5 s  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
   Wait Until Element Is Visible  xpath=//*[text()="Додати документ"]
@@ -1793,13 +1793,13 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
 
 Отримати посилання на аукціон для глядача
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}=${Empty}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${auction_url}=  Wait Until Keyword Succeeds  10 x  60 s  Дочекатися посилання на аукціон
   [Return]  ${auction_url}
 
 Отримати посилання на аукціон для учасника
   [Arguments]  ${username}  ${tender_uaid}
-tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${current_url}=  Get Location
   Run Keyword If  ${NUMBER_OF_LOTS} == 0  Execute Javascript  window['url'] = null; $.get( "${host}/seller/tender/updatebid", { id: "${current_url.split("/")[-1]}"}, function(data){ window['url'] = data.data.participationUrl },'json');
   ...  ELSE  Execute Javascript  window['url'] = null; $.get( "${host}/seller/tender/updatebid", { id: "${current_url.split("/")[-1]}"}, function(data){ window['url'] = data.data.lotValues[0].participationUrl },'json');
