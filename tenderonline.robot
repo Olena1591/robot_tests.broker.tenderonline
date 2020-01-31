@@ -217,7 +217,7 @@ Get Info From Plan Items
 
 Внести зміни в план
   [Arguments]  ${username}  ${planID}  ${field_name}  ${value}
-tenderonline.Пошук плану по ідентифікатору  ${username}  ${planID}
+  tenderonline.Пошук плану по ідентифікатору  ${username}  ${planID}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   ${value}=  Run Keyword If  "budget.amount" in "${field_name}"  Convert To String  ${value}
   ...  ELSE  Set Variable  ${value}
@@ -255,7 +255,7 @@ Update plan items info
 
 Видалити предмет закупівлі плану
   [Arguments]  ${username}  ${planID}  ${item_id}
-tenderonline.Пошук плану по ідентифікатору  ${username}  ${planID}
+  tenderonline.Пошук плану по ідентифікатору  ${username}  ${planID}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Дочекатися І Клікнути  xpath=//textarea[contains(text(), "${item_id}")]/ancestor::div[@class="item"]/descendant::button[contains(@class, "delete_item")]
   Confirm Action
@@ -265,7 +265,7 @@ tenderonline.Пошук плану по ідентифікатору  ${username
 
 Додати предмет закупівлі в план
   [Arguments]  ${username}  ${planID}  ${item}
-tenderonline.Пошук плану по ідентифікатору  ${username}  ${planID}
+  tenderonline.Пошук плану по ідентифікатору  ${username}  ${planID}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   ${item_index}=  Get Matching Xpath Count  xpath=//button[contains(@class, "delete_item")]
   ${item_index}=  Convert To Integer   ${item_index}
@@ -318,7 +318,7 @@ tenderonline.Пошук плану по ідентифікатору  ${username
 #  Дочекатися І Клікнути  xpath=//a[@href="${host}/tenders/index"]
   Switch Browser  ${username}
   Wait Until Element Is Not Visible  xpath=//div[@class="modal-backdrop fade"]  10
-tenderonline.Пошук плану по ідентифікатору  ${username}  ${plan_uaid}
+  tenderonline.Пошук плану по ідентифікатору  ${username}  ${plan_uaid}
   Дочекатися І Клікнути  xpath=//*[@id="create_auction_modal_btn"]
   Wait Until Element Is Visible  xpath=(//*[@class="modal-content"])[2]
   Run Keyword If  ${number_of_lots} > 0  Wait And Select From List By Value  name=tender_type  2
