@@ -174,7 +174,7 @@ Add item plan
   ...  AND  Дочекатися І Клікнути  xpath=//*[@class="switch_t"]
   ...  AND  Дочекатися І Клікнути  xpath=//*[@class="bg-close"]
   ...  AND  Wait Until Element Is Not Visible  xpath=//*[@class="switch_t"]
-  Дочекатися І Клікнути  xpath=//span[@id="more-filter"]
+#  Дочекатися І Клікнути  xpath=//span[@id="more-filter"]
   Wait Until Element Is Visible  xpath=//input[@id="plan-id"]
   Input text  xpath=//input[@name="PlansSearch[planID]"]  ${planID}
   Wait Until Keyword Succeeds  20 x  10 s  Run Keywords
