@@ -24,29 +24,29 @@ def subtract_min_from_date(date, minutes, template):
     return "{}+{}".format(date_obj - timedelta(minutes=minutes), date.split("+")[1])
 
 
-def convert_datetime_to_allbiz_format(isodate):
+def convert_datetime_to_tenderonline_format(isodate):
     iso_dt = parse_date(isodate)
     day_string = iso_dt.strftime("%d/%m/%Y %H:%M")
     return day_string
 
-def convert_date_plan_to_allbiz_format(isodate):
+def convert_date_plan_to_tenderonline_format(isodate):
     iso_dt = parse_date(isodate)
     day_string = iso_dt.strftime("%d/%m/%Y")
     return day_string
 
 
-def convert_date_plan_tender_to_allbiz_format(isodate):
+def convert_date_plan_tender_to_tenderonline_format(isodate):
     iso_dt = parse_date(isodate)
     day_string = iso_dt.strftime("%m/%Y")
     return day_string
 
-def convert_date_plan_to_allbiz_format_year(isodate):
+def convert_date_plan_to_tenderonline_format_year(isodate):
     iso_dt = parse_date(isodate)
     day_string = iso_dt.strftime("%Y")
     return day_string
 
 
-def convert_string_from_dict_allbiz(string):
+def convert_string_from_dict_tenderonline(string):
     return {
         u"грн.": u"UAH",
         u"True": u"1",
@@ -180,7 +180,7 @@ def adapt_view_tender_data(value, field_name):
         value = "P{}Y{}M{}D".format(l[0], l[2], l[4] )
     elif 'yearlyPaymentsPercentageRange'in field_name:
         value = round(float(value.split(" ")[-1][:-1]) / 100, 5)
-    return convert_string_from_dict_allbiz(value)
+    return convert_string_from_dict_tenderonline(value)
 
 
 def adapt_view_lot_data(value, field_name):
@@ -194,7 +194,7 @@ def adapt_view_lot_data(value, field_name):
         value = ' '.join(value.split(' ')[-3:]).strip()
     elif 'minimalStep.amount' in field_name:
         value = float("".join(value.split(' ')[:-1]))
-    return convert_string_from_dict_allbiz(value)
+    return convert_string_from_dict_tenderonline(value)
 
 
 def adapt_view_item_data(value, field_name):
@@ -204,7 +204,7 @@ def adapt_view_item_data(value, field_name):
         value = float(value.split(' ')[0])
     elif 'Date' in field_name:
         value = convert_time(value)
-    return convert_string_from_dict_allbiz(value)
+    return convert_string_from_dict_tenderonline(value)
 
 
 def get_related_elem_description(tender_data, feature, item_id):
@@ -228,4 +228,4 @@ def add_second_sign_after_point(amount):
 
 
 def get_upload_file_path():
-    return os.path.join(os.getcwd(), 'src/robot_tests.broker.tendersallbiz/testFileForUpload.txt')
+    return os.path.join(os.getcwd(), 'src/robot_tests.broker.tenderstenderonline/testFileForUpload.txt')
