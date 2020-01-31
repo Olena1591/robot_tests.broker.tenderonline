@@ -3,7 +3,7 @@ Library  Selenium2Library
 Library  String
 Library  Collections
 Library  DateTime
-Librarytenderonline_service.py
+Library  tenderonline_service.py
 
 *** Variables ***
 ${custom_acceleration}=  360
@@ -48,7 +48,7 @@ ${locator.plan.tender.procurementMethodType}=  xpath=//*[@data-test-id="procurem
 #  Open Browser  ${USERS.users['${username}'].homepage}  ${USERS.users['${username}'].browser}  alias=${username}  desired_capabilities= ${chromeOptions}
   Set Window Size  1024  10000
   Go To  ${USERS.users['${username}'].homepage}
-  Run Keyword If  '${username}' != 'allbiz_Viewer'  Run Keywords
+  Run Keyword If  '${username}' != ' tenderonline_Viewer'  Run Keywords
   ...  Login  ${username}
   ...  AND  Run Keyword And Ignore Error  Wait Until Keyword Succeeds  10 x  1 s  Закрити модалку з новинами  xpath=//button[@data-dismiss="modal"]
 
@@ -76,10 +76,10 @@ Login
   ${items}=  Get From Dictionary  ${tender_data.data}  items
   ${number_of_items}=  Get length  ${items}
   ${budget_amount}=  add_second_sign_after_point  ${tender_data.data.budget.amount}
-  ${tenderPeriod.startDate}=  convert_date_plan_tender_to_allbiz_format  ${tender_data.data.tender.tenderPeriod.startDate}
-  ${budget.period.startDate}=  Run Keyword If  "closeFrameworkAgreementUA" in "${tender_data.data.tender.procurementMethodType}"  convert_date_plan_to_allbiz_format_year  ${tender_data.data.budget.period.startDate}
+  ${tenderPeriod.startDate}=  convert_date_plan_tender_to_ tenderonline_format  ${tender_data.data.tender.tenderPeriod.startDate}
+  ${budget.period.startDate}=  Run Keyword If  "closeFrameworkAgreementUA" in "${tender_data.data.tender.procurementMethodType}"  convert_date_plan_to_ tenderonline_format_year  ${tender_data.data.budget.period.startDate}
   ...  ELSE  Set Variable  ${tender_data.data.budget.period.startDate}
-  ${budget.period.endDate}=  Run Keyword If  "closeFrameworkAgreementUA" in "${tender_data.data.tender.procurementMethodType}"  convert_date_plan_to_allbiz_format_year  ${tender_data.data.budget.period.endDate}
+  ${budget.period.endDate}=  Run Keyword If  "closeFrameworkAgreementUA" in "${tender_data.data.tender.procurementMethodType}"  convert_date_plan_to_ tenderonline_format_year  ${tender_data.data.budget.period.endDate}
   ...  ELSE  Set Variable  ${tender_data.data.budget.period.endDate}
 
   ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[@id="action-test-mode-msg"]
@@ -143,7 +143,7 @@ Add breakdown
 Add item plan
   [Arguments]  ${item_index}  ${item}
   ${quantity}=  Convert to string  ${item.quantity}
-  ${delivery_end_date}=  convert_date_plan_to_allbiz_format  ${item.deliveryDate.endDate}
+  ${delivery_end_date}=  convert_date_plan_to_ tenderonline_format  ${item.deliveryDate.endDate}
   Wait until element is not visible  xpath=//div[@class="modal-backdrop fade"]
   Wait until element is not visible  xpath=//div[@id="mbody"]
   Дочекатися І Клікнути   xpath=//button[@class="mk-btn mk-btn_default add_item_plan"]
@@ -194,7 +194,7 @@ Add item plan
   ${text}=  Run Keyword If  "amount" in "${field_name}"  Convert To Number  ${text}
   ...  ELSE  Set Variable  ${text}
 
-  ${value}=  convert_string_from_dict_allbiz  ${text}
+  ${value}=  convert_string_from_dict_ tenderonline  ${text}
   [Return]  ${value}
 
 
@@ -230,9 +230,9 @@ tenderonline.Пошук плану по ідентифікатору  ${username
 
 Update plan budget.period
   [Arguments]  ${username}  ${planID}  ${field_name}  ${value}
-#  ${data}=  convert_date_plan_tender_to_allbiz_format  ${value}
-  ${startDate}=  convert_date_plan_to_allbiz_format  ${value['startDate']}
-  ${endDate}=  convert_date_plan_to_allbiz_format  ${value['endDate']}
+#  ${data}=  convert_date_plan_tender_to_ tenderonline_format  ${value}
+  ${startDate}=  convert_date_plan_to_ tenderonline_format  ${value['startDate']}
+  ${endDate}=  convert_date_plan_to_ tenderonline_format  ${value['endDate']}
   Run Keyword If  "startDate" in "${value['startDate']}"  Execute Javascript  document.querySelector('[id="period-startdate"]').value="${startDate}}"
   ...  ELSE  Execute Javascript  document.querySelector('[id="period-enddate"]').value="${endDate}"
 #  Дочекатися І Клікнути  xpath=//button[@name="publish"]
@@ -244,7 +244,7 @@ Update plan items info
   ${match_res}=  Get Regexp Matches  ${field_name}  \\[(\\d+)\\]  1
   ${index}=  Convert To Integer  ${match_res[0]}
   ${field_name}=  Remove String Using Regexp  ${field_name}  \\[(\\d+)\\]
-  ${data}=  Run Keyword If  "deliveryDate.endDate" in "${field_name}"  convert_date_plan_to_allbiz_format  ${value}
+  ${data}=  Run Keyword If  "deliveryDate.endDate" in "${field_name}"  convert_date_plan_to_ tenderonline_format  ${value}
   Run Keyword If
   ...  "deliveryDate.endDate" in "${field_name}"  Execute Javascript  document.querySelector('[name="Plan[items][${index + 1}][deliveryDate][endDate]"]').value="${data}"
   ...  ELSE IF  "quantity" in "${field_name}"  Input text  xpath=//*[@name="Plan[items][${index + 1}][quantity]"]  ${value}
@@ -651,22 +651,22 @@ Add Item Tender
   \   Run Keyword if   ${index} != 0   Дочекатися І Клікнути   xpath=//input[@name="Tender[features][${feature_index}][title]"]/ancestor::div[@class="feature"]/descendant::button[contains(@class,"add_feature_enum")]
   \   Додати опцію   ${feature.enum[${index}]}   ${index}   ${feature_index}
 
-allbiz.Редагувати угоду
+ tenderonline.Редагувати угоду
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${fieldname}  ${fieldvalue}
 #tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 #  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
 #  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
   Log  ${fieldvalue}
 
-allbiz.Встановити дату підписання угоди
+ tenderonline.Встановити дату підписання угоди
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${fieldvalue}
   Log  ${fieldvalue}
 
-allbiz.Вказати період дії угоди
+ tenderonline.Вказати період дії угоди
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${startDate}  ${endDate}
   Log  ${startDate}
 
-allbiz.Завантажити документ в угоду
+ tenderonline.Завантажити документ в угоду
   [Arguments]  ${username}  ${path}  ${tender_uaid}  ${contract_index}  ${doc_type}=documents
 #  ${doc_type}=  Set Variable If  '${doc_type}' == 'None'  contractSigned  ${doc_type}
   Log  ${doc_type}
@@ -764,13 +764,13 @@ Go To And Assert
   [Arguments]  ${username}  ${tenderID}
 tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tenderID}
 
-allbiz.Перевести тендер на статус очікування обробки мостом
+ tenderonline.Перевести тендер на статус очікування обробки мостом
   [Arguments]  ${username}  ${tender_uaid}
 tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element  xpath=//*[@class="mk-btn mk-btn_danger"]/ancestor::div[@class="text-center"]
   Wait Until Keyword Succeeds  5x  1s   Page Should Contain  Очікування 2-го етапу
 
-allbiz.Отримати тендер другого етапу та зберегти його
+ tenderonline.Отримати тендер другого етапу та зберегти його
   [Arguments]  ${username}  ${tender_uaid}
 tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid[0:-2]}
 #  Capture Page Screenshot  filename=selenium-screenshot-{}.png
@@ -782,7 +782,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 #  Click Element  xpath=//*[@name="stage2_active_tendering"]
 
 
-allbiz.Активувати другий етап
+ tenderonline.Активувати другий етап
     [Arguments]  ${username}  ${tender_uaid}
   tenderonline.Отримати тендер другого етапу та зберегти його  ${username}  ${tender_uaid}
     Click Element  xpath=//*[@name="stage2_active_tendering"]
@@ -1156,7 +1156,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
   ${complaintID}=   Get Text   xpath=(//*[@data-test-id="complaint.complaintID"])[last()]
   [Return]  ${complaintID}
 
-allbiz.Створити скаргу про виправлення визначення переможця
+ tenderonline.Створити скаргу про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${award_index}  ${document}=${None}
 tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
@@ -1224,12 +1224,12 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
   Run Keyword If  '${field_name}' == 'qualificationPeriod.endDate'  Wait Until Keyword Succeeds  10 x  60 s  Run Keywords
   ...tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ...  AND  Page Should Contain Element  xpath=//*[@data-test-id="qualificationPeriod.endDate"]
-  ${value}=  Run Keyword If  'unit.code' in '${field_name}'  Log To Console   ${red}\n\t\t\t Це поле не виводиться на allbiz
+  ${value}=  Run Keyword If  'unit.code' in '${field_name}'  Log To Console   ${red}\n\t\t\t Це поле не виводиться на  tenderonline
   ...  ELSE IF  'qualifications' in '${field_name}'  Отримати інформацію із кваліфікації  ${username}  ${tender_uaid}  ${field_name}
   ...  ELSE IF  'awards' in '${field_name}'  Отримати інформацію із аварду  ${username}  ${tender_uaid}  ${field_name}
   ...  ELSE IF  'funders' in '${field_name}'  Get info from funders  ${username}  ${tender_uaid}  ${field_name}
   ...  ELSE IF  'unit' in '${field_name}'  Get Text  xpath=//*[@data-test-id="unit.name"]
-  ...  ELSE IF  'deliveryLocation' in '${field_name}'  Log To Console  ${red}\n\t\t\t Це поле не виводиться на allbiz
+  ...  ELSE IF  'deliveryLocation' in '${field_name}'  Log To Console  ${red}\n\t\t\t Це поле не виводиться на  tenderonline
   ...  ELSE IF  'items' in '${field_name}'  Get Text  xpath=//*[@data-test-id="${field_name.replace('[${index}]', '')}"]
 #  ...  ELSE IF  'contracts' in '${field_name}'  Get info from contracts  ${username}  ${tender_uaid}  ${field_name}
   ...  ELSE IF  '${field_name}' == 'cause'  Get Element Attribute  xpath=//*[@data-test-id="${field_name}"]@data-test-cause
@@ -1280,8 +1280,8 @@ Get info from funders
   ${red}=  Evaluate  "\\033[1;31m"
   ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
   ${value}=  Run Keyword If
-  ...  'unit.code' in '${field_name}'  Log To Console   ${red}\n\t\t\t Це поле не виводиться на allbiz
-  ...  ELSE IF  'deliveryLocation' in '${field_name}'  Log To Console  ${red}\n\t\t\t Це поле не виводиться на allbiz
+  ...  'unit.code' in '${field_name}'  Log To Console   ${red}\n\t\t\t Це поле не виводиться на  tenderonline
+  ...  ELSE IF  'deliveryLocation' in '${field_name}'  Log To Console  ${red}\n\t\t\t Це поле не виводиться на  tenderonline
   ...  ELSE IF  'unit' in '${field_name}'  Get Text  xpath=//*[contains(text(), '${item_id}')]/ancestor::div[@class="item no_border"]/descendant::*[@data-test-id='items.quantity']
   ...  ELSE  Get Text  xpath=//*[contains(text(), '${item_id}')]/ancestor::div[@class="item-block"]/descendant::*[@data-test-id='items.${field_name}']
   ${value}=  adapt_view_item_data  ${value}  ${field_name}
@@ -1350,7 +1350,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
   ...  Reload Page
   ...  AND  Page Should Contain Element  xpath=//*[contains(text(), "${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@data-test-id="complaint.${field_name}"]
   ${value}=  Get Text  xpath=//*[contains(text(), "${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@data-test-id="complaint.${field_name}"]
-  ${value}=  convert_string_from_dict_allbiz   ${value}
+  ${value}=  convert_string_from_dict_ tenderonline   ${value}
   [Return]  ${value}
 
 Отримати інформацію із документа до скарги
@@ -1694,7 +1694,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
   ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="cancel_prequalification"]
 
 
-allbiz.Скасування рішення кваліфікаційної комісії
+ tenderonline.Скасування рішення кваліфікаційної комісії
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
 tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${is_award}=  Run Keyword And Return Status  Page Should Contain  Визначення переможців
@@ -1709,7 +1709,7 @@ tenderonline.Пошук тендера по ідентифікатору   ${use
   Дочекатися І Клікнути  xpath=//button[@class="btn mk-btn mk-btn_danger"]
   Run Keyword If  ${is_award}  Disqualification of the first winner  ${username}  ${tender_uaid}  ${award_num}
 
-allbiz.Дискваліфікувати постачальника
+ tenderonline.Дискваліфікувати постачальника
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   Log  Необхідні дії було виконано у "Скасування рішення кваліфікаційної комісії"
 
@@ -1818,12 +1818,12 @@ ConvToStr And Input Text
 Conv And Select From List By Value
   [Arguments]  ${locator}  ${smth_to_select}
   ${smth_to_select}=  Convert To String  ${smth_to_select}
-#  ${smth_to_select}=  convert_string_from_dict_allbiz  ${smth_to_select}
+#  ${smth_to_select}=  convert_string_from_dict_ tenderonline  ${smth_to_select}
   Wait And Select From List By Value  ${locator}  ${smth_to_select}
 
 Input Date
   [Arguments]  ${elem_locator}  ${date}
-  ${date}=  convert_datetime_to_allbiz_format  ${date}
+  ${date}=  convert_datetime_to_ tenderonline_format  ${date}
 #  Input Text  ${elem_locator}  ${date}
   Execute Javascript  document.querySelector('[${elem_locator}]').value="${date}"
 
