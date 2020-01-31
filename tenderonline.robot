@@ -48,7 +48,7 @@ ${locator.plan.tender.procurementMethodType}=  xpath=//*[@data-test-id="procurem
 #  Open Browser  ${USERS.users['${username}'].homepage}  ${USERS.users['${username}'].browser}  alias=${username}  desired_capabilities= ${chromeOptions}
   Set Window Size  1024  10000
   Go To  ${USERS.users['${username}'].homepage}
-  Run Keyword If  '${username}' != ' tenderonline_Viewer'  Run Keywords
+  Run Keyword If  '${username}' != 'tenderonline_Viewer'  Run Keywords
   ...  Login  ${username}
   ...  AND  Run Keyword And Ignore Error  Wait Until Keyword Succeeds  10 x  1 s  Закрити модалку з новинами  xpath=//button[@data-dismiss="modal"]
 
