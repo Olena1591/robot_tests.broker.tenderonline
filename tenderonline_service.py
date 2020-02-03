@@ -125,10 +125,11 @@ def convert_string_from_dict_tenderonline(string):
 def adapt_procuringEntity(role_name, tender_data):
     if role_name == 'tender_owner':
         tender_data['data']['procuringEntity']['name'] = u"prozorroytenderowner"
-        tender_data['data']['procuringEntity']['address']['postalCode'] = u"01001"
-        tender_data['data']['procuringEntity']['address']['region'] = u"м. Київ"
-        tender_data['data']['procuringEntity']['address']['locality'] = u"Київ"
-        tender_data['data']['procuringEntity']['address']['streetAddress'] = u"Вулична вулиця"
+        if tender_data['data']['procuringEntity'].has_key("address"):
+            tender_data['data']['procuringEntity']['address']['postalCode'] = u"01001"
+            tender_data['data']['procuringEntity']['address']['region'] = u"м. Київ"
+            tender_data['data']['procuringEntity']['address']['locality'] = u"Київ"
+            tender_data['data']['procuringEntity']['address']['streetAddress'] = u"Вулична вулиця"
         tender_data['data']['procuringEntity']['identifier']['legalName'] = u"prozorroytenderowner"
         tender_data['data']['procuringEntity']['identifier']['id'] = u"12345679"
         tender_data['data']['procuringEntity']['contactPoint']['name'] = u"бла бла "

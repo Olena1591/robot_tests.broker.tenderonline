@@ -1217,7 +1217,7 @@ Feature Count Should Not Be Zero
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
 #  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${red}=  Evaluate  "\\033[1;31m"
-  ${index}=  Set Variable   ${field_name.split('[')[1].split(']')[0]}
+#  ${index}=  Set Variable   ${field_name.split('[')[1].split(']')[0]}
   Run Keyword If  'title' in '${field_name}'  Execute Javascript  $("[data-test-id|='title']").css("text-transform", "unset")
   Run Keyword If  'status' in '${field_name}'  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
 #  Run Keyword And Ignore Error  Click Element  xpath=//button[@data-dismiss="modal"]
