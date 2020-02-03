@@ -1349,6 +1349,7 @@ Get info from funders
   Wait Until Keyword Succeeds  10 x  60s  Run Keywords
   ...  Reload Page
   ...  AND  Page Should Contain Element  xpath=//*[contains(text(), "${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@data-test-id="complaint.${field_name}"]
+  Capture Page Screenshot
   ${value}=  Get Text  xpath=//*[contains(text(), "${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@data-test-id="complaint.${field_name}"]
   ${value}=  convert_string_from_dict_tenderonline   ${value}
   [Return]  ${value}
