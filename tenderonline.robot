@@ -501,7 +501,7 @@ Add milestone_tender
   ${lots_length}=  Get Length  ${lots}
   :FOR  ${index}  IN RANGE  ${lots_length}
   \  Run Keyword if  ${index} != 0  Дочекатися І Клікнути  xpath=//button[contains(@class, "add_lot")]
-  \tenderonline.Створити лотtenderonline_Owner  ${None}  ${lots[${index}]}  ${tender_data}
+  \  tenderonline.Створити лот  tenderonline_Owner  ${None}  ${lots[${index}]}  ${tender_data}
 
 
 Створити лот
