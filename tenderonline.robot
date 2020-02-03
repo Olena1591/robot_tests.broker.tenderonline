@@ -1057,7 +1057,7 @@ Feature Count Should Not Be Zero
 
 Створити вимогу про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${lot_id}  ${document}=${None}
-  ${complaintID}=tenderonline.Створити вимогу про виправлення умов закупівлі  ${username}  ${tender_uaid}  ${claim}  ${document}  ${lot_id}
+  ${complaintID}=  tenderonline.Створити вимогу про виправлення умов закупівлі  ${username}  ${tender_uaid}  ${claim}  ${document}  ${lot_id}
   [Return]  ${complaintID}
 
 Підтвердити вирішення вимоги про виправлення умов лоту
