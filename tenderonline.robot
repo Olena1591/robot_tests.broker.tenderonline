@@ -1239,7 +1239,7 @@ Feature Count Should Not Be Zero
   ...  ELSE IF  'contracts' in '${field_name}'  Отримати статус контракта  ${username}  ${tender_uaid}  ${field_name}
   ...  ELSE IF  '${field_name}' == 'lots[0].minimalStepPercentage'  Get Text  xpath=//*[@data-test-id="minimalStepPercentage"]
   ...  ELSE IF  '${field_name}' == 'lots[0].yearlyPaymentsPercentageRange'  Get Text  xpath=//*[@data-test-id="yearlyPaymentsPercentageRange"]
-  ...  ELSE IF   "stones" in "${field_name}"tenderonline.Get Info From Tender Milestones  ${field_name}
+  ...  ELSE IF   "stones" in "${field_name}"  Get Info From Tender Milestones  ${field_name}
   ...  ELSE IF   "fundingKind" in "${field_name}"  Get Text  xpath=//*[@data-test-id="fundingKind"]
   ...  ELSE IF   "clarificationsUntil" in "${field_name}"  Get Text  xpath=//*[@data-test-id="clarificationsUntil"]
   ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
