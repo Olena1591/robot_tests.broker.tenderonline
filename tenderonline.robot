@@ -1350,7 +1350,7 @@ Get info from funders
   ...  Reload Page
   ...  AND  Page Should Contain Element  xpath=//*[contains(text(), "${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@data-test-id="complaint.${field_name}"]
   ${value}=  Get Text  xpath=//*[contains(text(), "${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@data-test-id="complaint.${field_name}"]
-  ${value}=  convert_string_from_dict_ tenderonline   ${value}
+  ${value}=  convert_string_from_dict_tenderonline   ${value}
   [Return]  ${value}
 
 Отримати інформацію із документа до скарги
@@ -1360,7 +1360,7 @@ Get info from funders
   ...    Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   ...    AND  Дочекатися І Клікнути  xpath=//*[@class="page-panel"]/descendant::a[contains(@href,"tender/qualification-complaints")]
   ...  ELSE  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/complaints")]
-  ${value}=tenderonline.Отримати інформацію із документа  ${username}  ${tender_uaid}  ${doc_id}  ${field_name}
+  ${value}=  tenderonline.Отримати інформацію із документа  ${username}  ${tender_uaid}  ${doc_id}  ${field_name}
   [Return]  ${value}
 
 Отримати документ до скарги
