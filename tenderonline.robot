@@ -324,7 +324,7 @@ Update plan items info
   Run Keyword If  ${number_of_lots} > 0  Wait And Select From List By Value  name=tender_type  2
   ...  ELSE  Wait And Select From List By Value  name=tender_type  1
   Click Element  xpath=(//button[@class="mk-btn mk-btn_accept"])[2]
-  Wait Until Keyword Succeeds  10 x  1 s  Element Should Not Be Visible  xpath=(//*[@class="modal-content"])[2]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Not Be Visible  xpath=(//*[@class="modal-content"])[last()]
 #  Run Keyword If  "aboveThreshold" in "${tender_data.data.procurementMethodType}"  Conv And Select From List By Value  xpath=(//select[@id="guarantee-exist"])[3]  1
 #  ...  ELSE  Conv And Select From List By Value  xpath=(//select[@id="guarantee-exist"])[1]  1
 #  Conv And Select From List By Value  xpath=(//*[@data-test-id="guarantee-exist"])[${index_strategy}]  1
