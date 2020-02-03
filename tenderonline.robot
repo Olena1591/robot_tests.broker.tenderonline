@@ -320,7 +320,7 @@ Update plan items info
   Wait Until Element Is Not Visible  xpath=//div[@class="modal-backdrop fade"]  10
   tenderonline.Пошук плану по ідентифікатору  ${username}  ${plan_uaid}
   Дочекатися І Клікнути  xpath=//*[@id="create_auction_modal_btn"]
-  Wait Until Element Is Visible  xpath=(//*[@class="modal-content"])[2]
+  Wait Until Element Is Visible  xpath=(//*[@class="modal-content"])[last()]
   Run Keyword If  ${number_of_lots} > 0  Wait And Select From List By Value  name=tender_type  2
   ...  ELSE  Wait And Select From List By Value  name=tender_type  1
   Click Element  xpath=(//button[@class="mk-btn mk-btn_accept"])[2]
