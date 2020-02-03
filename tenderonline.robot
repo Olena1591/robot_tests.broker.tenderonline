@@ -1219,7 +1219,7 @@ Feature Count Should Not Be Zero
   ${red}=  Evaluate  "\\033[1;31m"
   ${index}=  Set Variable   ${field_name.split('[')[1].split(']')[0]}
   Run Keyword If  'title' in '${field_name}'  Execute Javascript  $("[data-test-id|='title']").css("text-transform", "unset")
-  Run Keyword If  'status' in '${field_name}'  Дочекатися І Клікнути  xpath=//*[contains(@href,"test-tenders.all.biz/tender/json/")]
+  Run Keyword If  'status' in '${field_name}'  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
 #  Run Keyword And Ignore Error  Click Element  xpath=//button[@data-dismiss="modal"]
   Run Keyword If  '${field_name}' == 'qualificationPeriod.endDate'  Wait Until Keyword Succeeds  10 x  60 s  Run Keywords
   ...  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
@@ -1375,7 +1375,7 @@ Get info from funders
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Run Keyword If  '${mode}' == 'open_esco'  Sleep  700
   ...  ELSE  Sleep  500
-  Дочекатися І Клікнути  xpath=//*[contains(@href,"test-tenders.all.biz/tender/json/")]
+  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
   ${is_edited}=  Run Keyword And Return Status  Page Should Contain Element  xpath=//span[@class="label label-danger"][contains(text(),"Недійсна")] /ancestor::div[@class="pull-right"]
   ${value}=  Run Keyword If  ${is_edited}  Set Variable  invalid
   ...  ELSE  Get Element Attribute  xpath=//input[contains(@name,"[value][amount]")]@value
@@ -1543,9 +1543,9 @@ Add annual costs reduction
   [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Run Keyword If  "${fieldname}" == "status"  Wait Until Keyword Succeeds  20 x  10 s  Run Keywords
-  ...  Дочекатися І Клікнути  xpath=//*[contains(@href,"test-tenders.all.biz/tender/json/")]
+  ...  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
   ...  AND  Page Should Contain Element  xpath=//span[@class="label label-danger"][contains(text(),"Недійсна")] /ancestor::div[@class="pull-right"]
-  Дочекатися І Клікнути  xpath=//*[contains(@href,"test-tenders.all.biz/tender/json/")]
+  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
   ${status}=  Run Keyword And Return Status  Page Should Not Contain  Недійсна
 #  ${update}=  Run Keyword And Return Status  Page Should Contain  Замовником внесено зміни в умови
   Run Keyword If  ${status} and "${mode}" != "open_esco"  ConvToStr And Input Text  xpath=//input[contains(@name,'[value][amount]')]  ${fieldvalue}
