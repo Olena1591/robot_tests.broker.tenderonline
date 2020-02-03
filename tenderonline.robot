@@ -174,7 +174,7 @@ Add item plan
   ...  AND  Дочекатися І Клікнути  xpath=//*[@class="switch_t"]
   ...  AND  Дочекатися І Клікнути  xpath=//*[@class="bg-close"]
   ...  AND  Wait Until Element Is Not Visible  xpath=//*[@class="switch_t"]
-#  Дочекатися І Клікнути  xpath=//span[@id="more-filter"]
+  Дочекатися І Клікнути  xpath=//span[@id="more-filter"]
   Wait Until Element Is Visible  xpath=//input[@id="plan-id"]
   Input text  xpath=//input[@name="PlansSearch[planID]"]  ${planID}
   Wait Until Keyword Succeeds  20 x  10 s  Run Keywords
@@ -651,22 +651,22 @@ Add Item Tender
   \   Run Keyword if   ${index} != 0   Дочекатися І Клікнути   xpath=//input[@name="Tender[features][${feature_index}][title]"]/ancestor::div[@class="feature"]/descendant::button[contains(@class,"add_feature_enum")]
   \   Додати опцію   ${feature.enum[${index}]}   ${index}   ${feature_index}
 
- tenderonline.Редагувати угоду
+tenderonline.Редагувати угоду
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${fieldname}  ${fieldvalue}
 #tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 #  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
 #  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
   Log  ${fieldvalue}
 
- tenderonline.Встановити дату підписання угоди
+tenderonline.Встановити дату підписання угоди
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${fieldvalue}
   Log  ${fieldvalue}
 
- tenderonline.Вказати період дії угоди
+tenderonline.Вказати період дії угоди
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${startDate}  ${endDate}
   Log  ${startDate}
 
- tenderonline.Завантажити документ в угоду
+tenderonline.Завантажити документ в угоду
   [Arguments]  ${username}  ${path}  ${tender_uaid}  ${contract_index}  ${doc_type}=documents
 #  ${doc_type}=  Set Variable If  '${doc_type}' == 'None'  contractSigned  ${doc_type}
   Log  ${doc_type}
@@ -764,13 +764,13 @@ Go To And Assert
   [Arguments]  ${username}  ${tenderID}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tenderID}
 
- tenderonline.Перевести тендер на статус очікування обробки мостом
+tenderonline.Перевести тендер на статус очікування обробки мостом
   [Arguments]  ${username}  ${tender_uaid}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element  xpath=//*[@class="mk-btn mk-btn_danger"]/ancestor::div[@class="text-center"]
   Wait Until Keyword Succeeds  5x  1s   Page Should Contain  Очікування 2-го етапу
 
- tenderonline.Отримати тендер другого етапу та зберегти його
+tenderonline.Отримати тендер другого етапу та зберегти його
   [Arguments]  ${username}  ${tender_uaid}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid[0:-2]}
 #  Capture Page Screenshot  filename=selenium-screenshot-{}.png
@@ -782,7 +782,7 @@ Go To And Assert
 #  Click Element  xpath=//*[@name="stage2_active_tendering"]
 
 
- tenderonline.Активувати другий етап
+tenderonline.Активувати другий етап
     [Arguments]  ${username}  ${tender_uaid}
   tenderonline.Отримати тендер другого етапу та зберегти його  ${username}  ${tender_uaid}
     Click Element  xpath=//*[@name="stage2_active_tendering"]
@@ -1103,7 +1103,7 @@ Feature Count Should Not Be Zero
 
 Скасувати вимогу про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${cancellation_data}
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/complaints")]
   Дочекатися І Клікнути  xpath=//input[@class="cancel_checkbox"]/..
   Ввести Текст  xpath=//*[contains(@name, "[cancellationReason]")]  ${cancellation_data.data.cancellationReason}
@@ -1116,7 +1116,7 @@ tenderonline.Пошук тендера по ідентифікатору  ${user
 
 Скасувати вимогу про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${cancellation_data}
-tenderonline.Скасувати вимогу про виправлення умов закупівлі  ${username}  ${tender_uaid}  ${complaintID}  ${cancellation_data}
+  tenderonline.Скасувати вимогу про виправлення умов закупівлі  ${username}  ${tender_uaid}  ${complaintID}  ${cancellation_data}
 
 Перетворити вимогу про виправлення умов закупівлі в скаргу
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}
