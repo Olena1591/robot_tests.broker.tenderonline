@@ -228,4 +228,4 @@ def add_second_sign_after_point(amount):
 
 
 def get_upload_file_path():
-    return os.path.join(os.getcwd(), 'src/robot_tests.broker.tenderstenderonline/testFileForUpload.txt')
+    return os.path.join(os.getcwd(), 'src/robot_tests.broker.tenderonline/testFileForUpload.txt')
