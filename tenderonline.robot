@@ -1198,6 +1198,7 @@ Feature Count Should Not Be Zero
   Select Checkbox  xpath=//*[contains(text(),"${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@class="cancel_checkbox"]
   Ввести Текст  xpath=//*[contains(text(),"${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@id="complaint-cancellationreason"]  ${cancellation_data.data.cancellationReason}
   Дочекатися І Клікнути  xpath=//*[contains(text(),"${complaintID}")]/ancestor::div[@class="mk-question"]/descendant::*[@class="mk-btn mk-btn_danger action-complaint-form-submit"]
+  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
 
 Перетворити вимогу про виправлення визначення переможця в скаргу
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}  ${award_index}
