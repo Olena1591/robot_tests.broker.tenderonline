@@ -1638,7 +1638,11 @@ Add annual costs reduction
   ...  Wait Element Animation  xpath=//*[@class="modal-dialog"]/descendant::button[contains(text(),"Накласти ЕЦП")]
 #  ...  AND  Click Element  xpath=//button[@class="btn btn-success"]
 #  ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
-  ...  AND  Накласти ЄЦП на контракт
+  ...  AND  Click Element  xpath=//button[@class="btn btn-danger"]
+  ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
+  ...  AND  Накласти ЄЦП  ${False}
+#  ...  AND  Накласти ЄЦП на контракт
+
 
 Підтвердити постачальника
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
