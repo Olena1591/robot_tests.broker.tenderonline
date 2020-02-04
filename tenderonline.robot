@@ -41,7 +41,7 @@ ${locator.plan.tender.procurementMethodType}=  xpath=//*[@data-test-id="procurem
   [Arguments]  ${username}
   ${chromeOptions}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
 #  ${prefs} =    Create Dictionary    download.default_directory=${downloadDir}
-#  Call Method    ${chromeOptions}    add_argument    --headless
+  Call Method    ${chromeOptions}    add_argument    --headless
 
 
   Create Webdriver    ${USERS.users['${username}'].browser}  alias=${username}   chrome_options=${chromeOptions}
@@ -1756,7 +1756,6 @@ Disqualification of the first winner
 #  Run Keyword If  '${MODE}' != 'belowThreshold'  Run Keywords
 #  Run Keyword If  '${MODE}' == 'open_competitive_dialogue'  Дочекатися І Клікнути  xpath=//
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/euprequalification")]
-  Capture Page Screenshot
   Дочекатися І Клікнути  xpath=//button[@name="prequalification_next_status"]
   Wait Until Page Contains  Оскарження прекваліфікації
 
