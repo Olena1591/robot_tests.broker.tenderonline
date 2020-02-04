@@ -1428,7 +1428,7 @@ Get info from funders
 
 Get Info From Complaints
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
-#  Click Element  xpath=(//a[contains(@href,"tender/qualification-complaints")])[last()]
+  Run Keyword If  '${mode}' == 'open_esco'  Click Element  xpath=(//a[contains(@href,"tender/qualification-complaints")])[last()]
   ${value}=  Get Text  xpath=//div[@class="col-xs-12 col-sm-6 col-md-4"]/following-sibling::div
   [Return]  ${value}
 
