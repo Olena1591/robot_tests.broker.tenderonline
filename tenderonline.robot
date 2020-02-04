@@ -1108,6 +1108,7 @@ Feature Count Should Not Be Zero
   Дочекатися І Клікнути  xpath=//input[@class="cancel_checkbox"]/..
   Ввести Текст  xpath=//*[contains(@name, "[cancellationReason]")]  ${cancellation_data.data.cancellationReason}
   Дочекатися І Клікнути  xpath=//button[@name="complaint_cancelled"]
+  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
 
 Створити чернетку вимоги про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${lot_id}
