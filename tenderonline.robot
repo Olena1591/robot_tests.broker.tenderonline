@@ -41,7 +41,7 @@ ${locator.plan.tender.procurementMethodType}=  xpath=//*[@data-test-id="procurem
   [Arguments]  ${username}
   ${chromeOptions}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
 #  ${prefs} =    Create Dictionary    download.default_directory=${downloadDir}
-  Call Method    ${chromeOptions}    add_argument    --headless
+#  Call Method    ${chromeOptions}    add_argument    --headless
 
 
   Create Webdriver    ${USERS.users['${username}'].browser}  alias=${username}   chrome_options=${chromeOptions}
@@ -1655,8 +1655,7 @@ Add annual costs reduction
 #tenderonline.Завантажити документ у кваліфікацію  ${username}  ${document}  ${tender_uaid}  ${qualification_num}
 #  Wait And Select From List By Value  xpath=//select[@id="document-type-0"]  awardNotice
   ${qualification_num}=  Convert To Integer  ${qualification_num}
-
-tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
 #  ${status}=  Run Keyword And Return Status  Wait Until Element Is Visible  xpath=//button[@data-dismiss="modal"]  5
 #  Run Keyword If  ${status}  Закрити модалку  xpath=//button[@data-dismiss="modal"]
