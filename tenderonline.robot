@@ -125,6 +125,7 @@ Login
   \  Add item plan  ${item_index}  ${items[${item_index}]}
   Wait until element is not visible  xpath=//div[@id="mbody"]
   Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_accept"]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[@class="global-alert"]
   Накласти ЄЦП
   Wait until element is visible  xpath=//div[@data-test-id="planID"]  20
   ${planID}=  Get text  xpath=//div[@data-test-id="planID"]
@@ -1474,6 +1475,7 @@ Get Info From Complaints
 
 Подати Пропозицію Без Накладення ЕЦП
   Wait Until Element Is Not Visible  xpath=//*[@class="spinner"]
+  Sleep  5
   Дочекатися І Клікнути  xpath=//button[@id="submit_bid"]
 #  Run Keyword And Ignore Error  Wait Until Keyword Succeeds  10 x  1 s  Run Keywords
 #  ...  Click Element  xpath=(//*[@data-dismiss="modal"])[last()]
@@ -1581,7 +1583,7 @@ Add annual costs reduction
   Run Keyword If  ${related_status}  Wait And Select From List By Value  xpath=(//select[contains(@name,"[relatedItem]")])[last()]  tender
   capture page screenshot
   Подати Пропозицію Без Накладення ЕЦП
-  Wait Until Element Is Visible  xpath=//div[contains(@class, 'alert-success')]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(@class, 'alert-success')]
   Дочекатися завантаження документу
 
 Змінити документ в ставці
