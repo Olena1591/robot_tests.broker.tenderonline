@@ -1590,7 +1590,7 @@ Add annual costs reduction
   Execute Javascript  window.confirm = function(msg) { return true; };
   Choose File  xpath=//div[contains(text(), 'Замiнити')]/form/input  ${path}
   Подати Пропозицію Без Накладення ЕЦП
-  Wait Until Element Is Visible  xpath=//div[contains(@class, 'alert-success')]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(@class, 'alert-success')]
   Дочекатися завантаження документу
 
 Змінити документацію в ставці
