@@ -1171,7 +1171,7 @@ tenderonline.Створити скаргу про виправлення виз�
   ...  AND  Wait Until Element Is Visible  xpath=//input[contains(@name, "[title]") and contains(@name,"documents")]
   ...  AND  Input Text  xpath=//input[contains(@name, "[title]") and contains(@name,"documents")]  ${document.split("/")[-1]}
   Дочекатися І Клікнути  xpath=//*[@class="mk-btn mk-btn_accept btn_submit_question"]
-  Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+  Wait Until Keyword Succeeds  10 x  3 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
   Дочекатися завантаження документу
   Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//*[contains(text(),"")]/preceding-sibling::*[@data-test-id="complaint.complaintID"]
   ${complaintID}=   Get Text   xpath=(//*[@data-test-id="complaint.complaintID"])[last()]
