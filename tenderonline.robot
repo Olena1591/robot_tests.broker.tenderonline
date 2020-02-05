@@ -1134,30 +1134,30 @@ Feature Count Should Not Be Zero
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}
   tenderonline.Перетворити вимогу про виправлення умов закупівлі в скаргу  ${username}  ${tender_uaid}  ${complaintID}  ${escalating_data}
 
-Створити вимогу про виправлення визначення переможця
-  [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${award_index}  ${document}=${None}
-  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
-  Toggle Sidebar
-#  Дочекатися І Клікнути  xpath=//a[contains(@href,"tender/qualification")]
-  Дочекатися І Клікнути  xpath=(//a[contains(@href,"tender/qualification-complaints")])[last()]
-  Дочекатися І Клікнути  xpath=//a[contains(@href,"tender/complaints-create")]
-#  Дочекатися І Клікнути  xpath=//a[contains(@href, "status=claim")]
-  Input Text  name=Complaint[title]  ${claim.data.title}
-  Input Text  name=Complaint[description]  ${claim.data.description}
-  Run Keyword If  '${document}' != '${None}'  Run Keywords
-  ...  Choose File  xpath=//input[@type="file"]  ${document}
-  ...  AND  Wait Until Element Is Visible  xpath=//input[contains(@name, "[title]") and contains(@name,"documents")]
-  ...  AND  Input Text  xpath=//input[contains(@name, "[title]") and contains(@name,"documents")]  ${document.split("/")[-1]}
-  Дочекатися І Клікнути  name=complaint_submit
-  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
-  Дочекатися завантаження документу
-#  Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//*[contains(text(),"${claim.data.title}")]/preceding-sibling::*[@data-test-id="complaint.complaintID"]
-  Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//*[contains(text(),"")]/preceding-sibling::*[@data-test-id="complaint.complaintID"]
-  ${complaintID}=   Get Text   xpath=(//*[@data-test-id="complaint.complaintID"])[last()]
-  [Return]  ${complaintID}
+#Створити вимогу про виправлення визначення переможця
+#  [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${award_index}  ${document}=${None}
+#  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+#  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
+#  Toggle Sidebar
+##  Дочекатися І Клікнути  xpath=//a[contains(@href,"tender/qualification")]
+#  Дочекатися І Клікнути  xpath=(//a[contains(@href,"tender/qualification-complaints")])[last()]
+#  Дочекатися І Клікнути  xpath=//a[contains(@href,"tender/complaints-create")]
+##  Дочекатися І Клікнути  xpath=//a[contains(@href, "status=claim")]
+#  Input Text  name=Complaint[title]  ${claim.data.title}
+#  Input Text  name=Complaint[description]  ${claim.data.description}
+#  Run Keyword If  '${document}' != '${None}'  Run Keywords
+#  ...  Choose File  xpath=//input[@type="file"]  ${document}
+#  ...  AND  Wait Until Element Is Visible  xpath=//input[contains(@name, "[title]") and contains(@name,"documents")]
+#  ...  AND  Input Text  xpath=//input[contains(@name, "[title]") and contains(@name,"documents")]  ${document.split("/")[-1]}
+#  Дочекатися І Клікнути  name=complaint_submit
+#  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
+#  Дочекатися завантаження документу
+##  Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//*[contains(text(),"${claim.data.title}")]/preceding-sibling::*[@data-test-id="complaint.complaintID"]
+#  Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//*[contains(text(),"")]/preceding-sibling::*[@data-test-id="complaint.complaintID"]
+#  ${complaintID}=   Get Text   xpath=(//*[@data-test-id="complaint.complaintID"])[last()]
+#  [Return]  ${complaintID}
 
- tenderonline.Створити скаргу про виправлення визначення переможця
+tenderonline.Створити скаргу про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${award_index}  ${document}=${None}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
@@ -1171,8 +1171,9 @@ Feature Count Should Not Be Zero
   ...  AND  Wait Until Element Is Visible  xpath=//input[contains(@name, "[title]") and contains(@name,"documents")]
   ...  AND  Input Text  xpath=//input[contains(@name, "[title]") and contains(@name,"documents")]  ${document.split("/")[-1]}
   Дочекатися І Клікнути  xpath=//*[@class="mk-btn mk-btn_accept btn_submit_question"]
+  Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
   Дочекатися завантаження документу
-    Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//*[contains(text(),"")]/preceding-sibling::*[@data-test-id="complaint.complaintID"]
+  Wait Until Keyword Succeeds  10 x  30 s  Page Should Contain Element  xpath=//*[contains(text(),"")]/preceding-sibling::*[@data-test-id="complaint.complaintID"]
   ${complaintID}=   Get Text   xpath=(//*[@data-test-id="complaint.complaintID"])[last()]
   [Return]  ${complaintID}
 
@@ -1776,10 +1777,12 @@ Disqualification of the first winner
   ...  Reload Page
 #  ...  AND  Element Should Be Visible  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
 #  ...  AND  Click Element  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
+  ...  AND  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
+  ...  AND  Wait Element Animation  xpath=//*[contains(@name,"[dateSigned]")]
   ...  AND  Page Should Not Contain  Файл завантажується...
-  ...  AND  Page Should Contain Element  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
-  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
-  Wait Element Animation  xpath=//*[contains(@name,"[dateSigned]")]
+  ...  AND  Page Should Contain Element  xpath=//button[text()='Активувати']
+#  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
+#  Wait Element Animation  xpath=//*[contains(@name,"[dateSigned]")]
 #  Mouse Down  xpath=//*[contains(@name,"[dateSigned]")]
   Input Text  xpath=//input[contains(@name,"[contractNumber]")]  777
   Run Keyword If  '${mode}' == 'reporting'  Click Element  xpath=//*[@name="Contract[${contract_num}][dateSigned]"]
