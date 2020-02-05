@@ -1788,7 +1788,8 @@ Disqualification of the first winner
   Wait And Select From List By Value  xpath=//*[@class="select_valueAddedTaxIncluded"]  0
 #  Focus  xpath=//button[text()='Активувати']
   Дочекатися І Клікнути  xpath=//button[text()='Активувати']
-  Run Keyword If  '${MODE}' != 'belowThreshold'  Wait Until Keyword Succeeds  10 x  2 s  Page Should Contain Element  xpath=//*[@class="modal-dialog"]/descendant::button[contains(text(),"Накласти ЕЦП")]
+  Run Keyword If  '${MODE}' != 'belowThreshold'  Run Keywords
+  ...  Wait Until Keyword Succeeds  10 x  2 s  Page Should Contain Element  xpath=//*[@class="modal-dialog"]/descendant::button[contains(text(),"Накласти ЕЦП")]
   ...  AND  Run Keyword  Накласти ЄЦП на контракт
 #  ...  Wait Element Animation  xpath=//*[@class="modal-dialog"]/descendant::button[contains(text(),"Накласти ЕЦП")]
 #  ...  AND  Накласти ЄЦП на контракт
