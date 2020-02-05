@@ -712,7 +712,7 @@ Get Last Feature Index
   Input Text  xpath=(//input[@class="file_name"])[last()]  ${filepath.split("/")[-1]}
   Select From List By Value  xpath=(//select[contains(@name, "Tender[documents]")])[last()]  tender
   Click Button  xpath=//button[contains(@class,'btn_submit_form')]
-  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
   Дочекатися завантаження документу
 
 Дочекатися завантаження документу
@@ -1370,7 +1370,7 @@ Get info from funders
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${doc_id}  ${award_id}=${None}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/complaints")]
-  ${value}=tenderonline.Отримати документ   ${username}  ${tender_uaid}  ${doc_id}
+  ${value}=  tenderonline.Отримати документ   ${username}  ${tender_uaid}  ${doc_id}
   [Return]  ${value}
 
 Отримати інформацію із пропозиції
@@ -1662,7 +1662,7 @@ Add annual costs reduction
 #  Run Keyword If  ${status}  Закрити модалку  xpath=//button[@data-dismiss="modal"]
   Дочекатися І Клікнути  xpath=//*[@data-mtitle="№" and text()=${qualification_num * -1 + 1}]/..//descendant::button[@class="mk-btn mk-btn_accept"]
 #  ...  ELSE  Дочекатися І Клікнути  xpath=//*[@name="Qualifications[${qualification_num * -1}][qualified]"]/ancestor::div[@class="col-xs-12"]/descendant::button[@class="mk-btn mk-btn_accept"]
-  Wait Element Animation  xpath=//*[@class="fade modal in"]
+  Wait Element Animation  xpath=//select[@class="choose_prequalification"]
 #  Дочекатися І Клікнути  xpath=//*[@name="Qualifications[${qualification_num}][action]"]
 #  Select From list By Index  xpath=//*[@name="Qualifications[${qualification_num * -1}][action]"]  0
   Select From list By Index  xpath=//select[@class="choose_prequalification"]  0
@@ -1671,8 +1671,8 @@ Add annual costs reduction
 #  Click Element  xpath=//*[@name="Qualifications[${qualification_num * -1}][eligible]"]/ancestor::div[contains(@class,"field-wrapper ")]
   Click Element  xpath=//input[contains(@id, "eligible")]
   Click Element  xpath=(//*[@class="mk-btn mk-btn_accept btn-submitform_qualification"])[1]
-  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="cancel_prequalification"]
-
+#  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="cancel_prequalification"]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
 
 Відхилити кваліфікацію
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
