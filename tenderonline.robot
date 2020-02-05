@@ -1473,9 +1473,9 @@ Get Info From Complaints
 Подати Пропозицію Без Накладення ЕЦП
   Wait Until Element Is Not Visible  xpath=//*[@class="spinner"]
   Дочекатися І Клікнути  xpath=//button[@id="submit_bid"]
-  Run Keyword And Ignore Error  Wait Until Keyword Succeeds  10 x  1 s  Run Keywords
-  ...  Click Element  xpath=(//*[@data-dismiss="modal"])[last()]
-  ...  AND  Wait Until Page Does Not Contain  Зверніть увагу  10
+#  Run Keyword And Ignore Error  Wait Until Keyword Succeeds  10 x  1 s  Run Keywords
+#  ...  Click Element  xpath=(//*[@data-dismiss="modal"])[last()]
+#  ...  AND  Wait Until Page Does Not Contain  Зверніть увагу  10
 
 Ввести пропозицію для лотової зкупівлі
   [Arguments]  ${bid}
@@ -1576,6 +1576,7 @@ Add annual costs reduction
   Run Keyword If  ${doc_type_status}  Wait And Select From List By Value  xpath=(//select[contains(@name,"[documentType]")])[last()]  ${doc_type.replace("_d", "D").replace("financialDocuments","commercialProposal")}
   ${related_status}=  Run Keyword And Return Status  Element Should Be Visible  xpath=(//select[contains(@name,"[relatedItem]")])[last()]
   Run Keyword If  ${related_status}  Wait And Select From List By Value  xpath=(//select[contains(@name,"[relatedItem]")])[last()]  tender
+  capture page screenshot
   Подати Пропозицію Без Накладення ЕЦП
   Wait Until Element Is Visible  xpath=//div[contains(@class, 'alert-success')]
   Дочекатися завантаження документу
