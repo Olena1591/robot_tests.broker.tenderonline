@@ -1571,6 +1571,7 @@ Add annual costs reduction
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Scroll To Element  xpath=(//input[@type="file"])[last()]
   Choose File  xpath=(//input[@type="file"])[last()]  ${path}
+  Sleep  5
   ${full_doc_name}=  Set Variable  ${path.split('/')[-1]}
   ${doc_name}=  Set Variable  ${full_doc_name.split(".")[0]}
   ${doc_type_status}=  Run Keyword And Return Status  Wait Until Element Is visible  xpath=(//select[contains(@name,"[documentType]")])[last()]  10
