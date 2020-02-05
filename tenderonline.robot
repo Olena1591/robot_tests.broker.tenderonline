@@ -1050,9 +1050,9 @@ Feature Count Should Not Be Zero
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${confirmation_data}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href, "/complaints")]
-  Run Keyword If  ${confirmation_data.data.satisfied}  Дочекатися І Клікнути  xpath=//button[@name="complaint_resolved"]
-  ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="claim_satisfied_false"]
-  Wait Until Keyword Succeeds  30 x  1 s  Page Should Contain Element  xpath=//*[@data-test-id="complaint.satisfied"]
+  Run Keyword If  ${confirmation_data.data.satisfied}  Дочекатися І Клікнути  xpath=//span[contains(text(),"${complaintID}")]/ancestor::div[@class="item-inf_txt"]/descendant::button[@name="complaint_resolved"]
+  ...  ELSE  Дочекатися І Клікнути  xpath=//span[contains(text(),"${complaintID}")]/ancestor::div[@class="item-inf_txt"]/descendant::button[@name="claim_satisfied_false"]
+  Wait Until Keyword Succeeds  30 x  1 s  Page Should Contain Element  xpath=//span[contains(text(),"${complaintID}")]/ancestor::div[@class="item-inf_txt"]/descendant::span[@data-test-id="complaint.satisfied"]
   Sleep  600
 
 Створити вимогу про виправлення умов лоту
