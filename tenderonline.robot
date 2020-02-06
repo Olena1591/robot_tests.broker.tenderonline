@@ -1446,11 +1446,11 @@ Get Info From Complaints
   ...  AND  Wait Element Animation  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
   ...  AND  Page Should Contain  Договір активовано
   ${value}=  Set Variable If  ${status}  active
-  ${is_modal_open}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
-  Run Keyword If  ${is_modal_open}  Run Keywords
-  ...  Click Element  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
-  ...  AND  Wait Element Animation  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
-  Click Element  xpath=//*[@id="slidePanel"]/descendant::*[contains(@href,"tender/view")]
+#  ${is_modal_open}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
+#  Run Keyword If  ${is_modal_open}  Run Keywords
+#  ...  Click Element  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
+#  ...  AND  Wait Element Animation  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
+#  Click Element  xpath=//*[@id="slidePanel"]/descendant::*[contains(@href,"tender/view")]
   [Return]  ${value}
 
 ###############################################################################################################
