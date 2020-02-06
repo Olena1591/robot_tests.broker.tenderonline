@@ -1446,11 +1446,11 @@ Get Info From Complaints
   ...  AND  Wait Element Animation  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
   ...  AND  Page Should Contain  Договір активовано or contract.status.active
   ${value}=  Set Variable If  ${status}  active
-#  ${is_modal_open}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
-#  Run Keyword If  ${is_modal_open}  Run Keywords
-#  ...  Click Element  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
-#  ...  AND  Wait Element Animation  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
-#  Click Element  xpath=//*[@id="slidePanel"]/descendant::*[contains(@href,"tender/view")]
+  ${is_modal_open}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
+  Run Keyword If  ${is_modal_open}  Run Keywords
+  ...  Click Element  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
+  ...  AND  Wait Element Animation  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
+  Click Element  xpath=//*[@id="slidePanel"]/descendant::*[contains(@href,"tender/view")]
   [Return]  ${value}
 
 ###############################################################################################################
@@ -1686,14 +1686,15 @@ Add annual costs reduction
   ${qualification_num}=  Convert To Integer  ${qualification_num}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
-  Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")]
-  ...  ELSE  Дочекатися І Клікнути  xpath=(//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")])[${qualification_num + 1}]
+#  Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")]
+#  ...  ELSE  Дочекатися І Клікнути  xpath=(//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")])[${qualification_num + 1}]
 #  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="Qualifications[${qualification_num}][action]"]
-  Wait Element Animation  xpath=//*[@class="fade modal in"]
-  Select From list By Index  xpath=//*[@name="Qualifications[${qualification_num + 1}][action]"]  1
-  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]//ancestor::*[contains(@class,"tbl-r")]/descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає квалiфiкацiйним критерiям."]
-  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]//ancestor::*[contains(@class,"tbl-r")]/descendant::*[@name="Qualifications[cause][]"][@value="Наявнi пiдстави, зазначенi у статтi 17."]
-  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]//ancestor::*[contains(@class,"tbl-r")]/descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає вимогам тендерної документацiї."]
+  Дочекатися І Клікнути  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::button[@class="mk-btn mk-btn_accept"]
+  Wait Element Animation  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::select[@class="choose_prequalification"]  1
+  Select From list By Index  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::select[@class="choose_prequalification"]  1
+  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає квалiфiкацiйним критерiям."]
+  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Наявнi пiдстави, зазначенi у статтi 17."]
+  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає вимогам тендерної документацiї."]
   Дочекатися І Клікнути  xpath=//*[@class="mk-btn mk-btn_danger btn-submitform_qualification"]
 
 
@@ -1707,7 +1708,7 @@ Add annual costs reduction
   ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="cancel_prequalification"]
 
 
- tenderonline.Скасування рішення кваліфікаційної комісії
+tenderonline.Скасування рішення кваліфікаційної комісії
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${is_award}=  Run Keyword And Return Status  Page Should Contain  Визначення переможців
@@ -1722,7 +1723,7 @@ Add annual costs reduction
   Дочекатися І Клікнути  xpath=//button[@class="btn mk-btn mk-btn_danger"]
   Run Keyword If  ${is_award}  Disqualification of the first winner  ${username}  ${tender_uaid}  ${award_num}
 
- tenderonline.Дискваліфікувати постачальника
+tenderonline.Дискваліфікувати постачальника
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   Log  Необхідні дії було виконано у "Скасування рішення кваліфікаційної комісії"
 
