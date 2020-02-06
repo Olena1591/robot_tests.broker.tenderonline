@@ -1573,11 +1573,12 @@ Add annual costs reduction
   ${doc_type}=  Set Variable If  '${doc_type}' == 'winningBid'  technicalSpecifications  ${doc_type}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Scroll To Element  xpath=(//input[@type="file"])[last()]
-  Choose File  xpath=(//input[@type="file"])[last()]  ${path}
   Sleep  5
+  Choose File  xpath=(//input[@type="file"])[last()]  ${path}
   ${full_doc_name}=  Set Variable  ${path.split('/')[-1]}
   ${doc_name}=  Set Variable  ${full_doc_name.split(".")[0]}
   ${doc_type_status}=  Run Keyword And Return Status  Wait Until Element Is visible  xpath=(//select[contains(@name,"[documentType]")])[last()]  10
+  Sleep  5
   Run Keyword If  ${doc_type_status}  Wait And Select From List By Value  xpath=(//select[contains(@name,"[documentType]")])[last()]  ${doc_type.replace("_d", "D").replace("financialDocuments","commercialProposal")}
   ${related_status}=  Run Keyword And Return Status  Element Should Be Visible  xpath=(//select[contains(@name,"[relatedItem]")])[last()]
   Run Keyword If  ${related_status}  Wait And Select From List By Value  xpath=(//select[contains(@name,"[relatedItem]")])[last()]  tender
