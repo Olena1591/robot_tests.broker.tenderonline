@@ -1692,7 +1692,7 @@ Add annual costs reduction
 #  ...  ELSE  Дочекатися І Клікнути  xpath=(//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")])[${qualification_num + 1}]
 #  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="Qualifications[${qualification_num}][action]"]
   Дочекатися І Клікнути  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::button[@class="mk-btn mk-btn_accept"]
-  Wait Element Animation  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::select[@class="choose_prequalification"]  1
+  Wait Element Animation  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::select[@class="choose_prequalification"]
   Select From list By Index  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::select[@class="choose_prequalification"]  1
   Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає квалiфiкацiйним критерiям."]
   Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Наявнi пiдстави, зазначенi у статтi 17."]
