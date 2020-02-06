@@ -1444,7 +1444,7 @@ Get Info From Complaints
   ${status}=  Run Keyword And Return Status  Run Keywords
   ...  Click Element  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
   ...  AND  Wait Element Animation  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
-  ...  AND  Page Should Contain  Договір активовано
+  ...  AND  Page Should Contain  Договір активовано or contract.status.active
   ${value}=  Set Variable If  ${status}  active
 #  ${is_modal_open}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
 #  Run Keyword If  ${is_modal_open}  Run Keywords
