@@ -1158,7 +1158,7 @@ Feature Count Should Not Be Zero
 #  ${complaintID}=   Get Text   xpath=(//*[@data-test-id="complaint.complaintID"])[last()]
 #  [Return]  ${complaintID}
 
-tenderonline.Створити скаргу про виправлення визначення переможця
+tenderonline.Створити вимогу про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${award_index}  ${document}=${None}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
@@ -1189,7 +1189,7 @@ tenderonline.Створити скаргу про виправлення виз�
 
 Створити чернетку вимоги про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${award_index}
-  ${complaint_id}=tenderonline.Створити вимогу про виправлення визначення переможця   ${username}  ${tender_uaid}  ${claim}  ${award_index}
+  ${complaint_id}=  tenderonline.Створити вимогу про виправлення визначення переможця   ${username}  ${tender_uaid}  ${claim}  ${award_index}
   [Return]  ${complaint_id}
 
 Скасувати вимогу про виправлення визначення переможця
