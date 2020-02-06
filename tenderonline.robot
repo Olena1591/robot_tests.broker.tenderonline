@@ -1471,7 +1471,7 @@ Get Info From Complaints
   Run Keyword If  ${selfeligible_status}  Дочекатися І Клікнути  xpath=//input[@id="bid-selfeligible"]/..
   Run Keyword If  ${selfqualified_status}  Дочекатися І Клікнути  xpath=//input[@id="bid-selfqualified"]/..
   Подати Пропозицію Без Накладення ЕЦП
-  Wait Until Element Is Visible  xpath=//div[contains(@class, 'alert-success')]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(@class, 'alert-success')]
 
 Подати Пропозицію Без Накладення ЕЦП
   Wait Until Element Is Not Visible  xpath=//*[@class="spinner"]
