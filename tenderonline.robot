@@ -1441,7 +1441,7 @@ Get Info From Complaints
   ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   Run Keyword If  ${is_visible}  Run Keywords
   ...  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
-  ...  AND  Дочекатися І Клікнути  xpath=//*[contains(@href,"/tender/protokol/96141?language-picker-language=uk-UA")]
+  ...  AND  Дочекатися І Клікнути  xpath=//*[contains(@href,"language-picker-language=uk-UA")]
   ...  ELSE  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   ${status}=  Run Keyword And Return Status  Run Keywords
   ...  Click Element  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
