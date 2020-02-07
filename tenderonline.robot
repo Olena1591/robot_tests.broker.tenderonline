@@ -1700,6 +1700,7 @@ Add annual costs reduction
   Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Наявнi пiдстави, зазначенi у статтi 17."]
   Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає вимогам тендерної документацiї."]
   Дочекатися І Клікнути  xpath=//*[@class="mk-btn mk-btn_danger btn-submitform_qualification"]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
 
 
 
@@ -1709,6 +1710,7 @@ Add annual costs reduction
   ${qualification_num}=  Convert To Integer  ${qualification_num}
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
   Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[2]
+  ...  ELSE IF  '${mode}' == 'open_framework'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[2]
   ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="cancel_prequalification"]
 
 
