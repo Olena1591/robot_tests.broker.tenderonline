@@ -713,6 +713,7 @@ Get Last Feature Index
   Wait Until Element Is Visible  xpath=(//input[@class="file_name"])[last()]
   Input Text  xpath=(//input[@class="file_name"])[last()]  ${filepath.split("/")[-1]}
   Select From List By Value  xpath=(//select[contains(@name, "Tender[documents]")])[last()]  tender
+  Sleep  5
   Click Button  xpath=//button[contains(@class,'btn_submit_form')]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
   Дочекатися завантаження документу
@@ -1709,9 +1710,10 @@ Add annual costs reduction
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${qualification_num}=  Convert To Integer  ${qualification_num}
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
-  Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[2]
-  ...  ELSE IF  '${mode}' == 'open_framework'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[2]
-  ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="cancel_prequalification"]
+#  Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[${qualification_num + 1}]
+#  ...  ELSE IF  '${mode}' == 'open_framework'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[${qualification_num + 1}]
+#  ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="cancel_prequalification"]
+  Дочекатися І Клікнути  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::button[@name="cancel_prequalification"]
 
 
 tenderonline.Скасування рішення кваліфікаційної комісії
@@ -1798,8 +1800,11 @@ Disqualification of the first winner
 #  Mouse Down  xpath=//*[contains(@name,"[dateSigned]")]
   Input Text  xpath=//input[contains(@name,"[contractNumber]")]  777
   Run Keyword If  '${mode}' == 'reporting'  Click Element  xpath=//*[@name="Contract[${contract_num}][dateSigned]"]
-  Input Text  name=ContractPeriod[${contract_num}][startDate]  15/02/2020 00:00:00
-  Input Text  name=ContractPeriod[${contract_num}][endDate]  20/03/2020 00:00:00
+#  Input Text  name=ContractPeriod[${contract_num}][startDate]  15/02/2020 00:00:00
+#  Input Text  name=ContractPeriod[${contract_num}][endDate]  20/03/2020 00:00:00
+  Execute Javascript   document.querySelector('[name="ContractPeriod[${contract_num}][startDate]"]').value="15/02/2020 00:00"
+#  Execute Javascript  document.querySelector('[name="Plan[budget][period][endDate]"]').value="${budget.period.endDate}"
+  Execute Javascript  document.querySelector('[name="ContractPeriod[${contract_num}][endDate]"]').value="20/03/2020 00:00"
   Wait And Select From List By Value  xpath=//*[@class="select_valueAddedTaxIncluded"]  0
 #  Focus  xpath=//button[text()='Активувати']
   Дочекатися І Клікнути  xpath=//button[text()='Активувати']
