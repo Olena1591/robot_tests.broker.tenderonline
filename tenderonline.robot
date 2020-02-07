@@ -650,6 +650,7 @@ Add Item Tender
   Дочекатися І Клікнути  xpath=//select[@name="Tender[features][${feature_index}][relatedItem]"]/descendant::option[contains(text(),"${relatedItem}")]
   :FOR   ${index}   IN RANGE   ${enum_length}
   \   Run Keyword if   ${index} != 0   Дочекатися І Клікнути   xpath=//input[@name="Tender[features][${feature_index}][title]"]/ancestor::div[@class="feature"]/descendant::button[contains(@class,"add_feature_enum")]
+  \   Sleep  5
   \   Додати опцію   ${feature.enum[${index}]}   ${index}   ${feature_index}
 
 tenderonline.Редагувати угоду
@@ -1800,6 +1801,7 @@ Disqualification of the first winner
   Wait And Select From List By Value  xpath=//*[@class="select_valueAddedTaxIncluded"]  0
 #  Focus  xpath=//button[text()='Активувати']
   Дочекатися І Клікнути  xpath=//button[text()='Активувати']
+  Capture Page Screenshot
   Run Keyword If  '${MODE}' != 'belowThreshold'  Run Keywords
   ...  Wait Until Keyword Succeeds  10 x  2 s  Page Should Contain Element  xpath=//*[@class="modal-dialog"]/descendant::button[contains(text(),"Накласти ЕЦП")]
   ...  AND  Run Keyword  Накласти ЄЦП на контракт
