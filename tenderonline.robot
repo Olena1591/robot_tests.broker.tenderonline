@@ -1225,6 +1225,7 @@ tenderonline.Створити скаргу про виправлення виз�
   ${red}=  Evaluate  "\\033[1;31m"
 
   Run Keyword If  'title' in '${field_name}'  Execute Javascript  $("[data-test-id|='title']").css("text-transform", "unset")
+#  Run Keyword If  "статусу непідписаної угоди з постачальником" in "${TEST_NAME}"  Дочекатися І Клікнути  xpath=//div[@class="modal-header"]/descendant::*[contains(text(),"Документи кваліфікації")]/preceding-sibling::*[@class="close"]
   Run Keyword If  'status' in '${field_name}'  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
 #  Run Keyword And Ignore Error  Click Element  xpath=//button[@data-dismiss="modal"]
   Run Keyword If  '${field_name}' == 'qualificationPeriod.endDate'  Wait Until Keyword Succeeds  10 x  60 s  Run Keywords
@@ -1704,6 +1705,14 @@ Make Global Qualifications List
   Click Element  xpath=(//*[@class="mk-btn mk-btn_accept btn-submitform_qualification"])[1]
 #  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="cancel_prequalification"]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+
+tenderonline.Затвердити постачальників
+  [Arguments]  ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
+  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_accept js-btn-agreement-action"]
+  Wait Element Animation  xpath=//button[@class="btn mk-btn mk-btn_accept"]
+  Дочекатися І Клікнути  xpath=//button[@class="btn mk-btn mk-btn_accept"]
 
 Відхилити кваліфікацію
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
