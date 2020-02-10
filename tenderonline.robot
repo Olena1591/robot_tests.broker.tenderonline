@@ -1664,6 +1664,7 @@ Add annual costs reduction
 #  ...  AND  Click Element  xpath=//button[@class="btn btn-success"]
 #  ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
   ...  AND  Click Element  xpath=//button[@class="btn btn-danger"]
+  ...  AND  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//button[contains(@id, "modal-award-qualification-button")]
   ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
   ...  AND  Накласти ЄЦП  ${False}
 #  ...  AND  Накласти ЄЦП на контракт
@@ -1844,6 +1845,14 @@ Disqualification of the first winner
   ...  AND  Run Keyword  Накласти ЄЦП на контракт
 #  ...  Wait Element Animation  xpath=//*[@class="modal-dialog"]/descendant::button[contains(text(),"Накласти ЕЦП")]
 #  ...  AND  Накласти ЄЦП на контракт
+
+
+Встановити ціну (рамка)
+  [Arguments]
+  ${company_name}=  Set Variable  ${qualifications_lst[${qualification_num}]}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
+  Дочекатися І Клікнути  xpath=////button[@id="agreement-contract-modal-${num}"]
 
 
 ###############################################################################################################
