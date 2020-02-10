@@ -1237,7 +1237,7 @@ tenderonline.Створити скаргу про виправлення виз�
   ...  ELSE IF  'unit' in '${field_name}'  Get Text  xpath=//*[@data-test-id="unit.name"]
   ...  ELSE IF  'deliveryLocation' in '${field_name}'  Log To Console  ${red}\n\t\t\t Це поле не виводиться на  tenderonline
   ...  ELSE IF  'items' in '${field_name}'  Get Text  xpath=(//*[@data-test-id="${field_name.replace('[${field_name.split('[')[1].split(']')[0]}]', '')}"])[${field_name.split('[')[1].split(']')[0]} + 1]
-  ...  ELSE IF  'agreements' in '${field_name}'  Get Text  xpath=//*[@data-test-id="${field_name.replace('[${field_name.split('[')[1].split(']')[0]}]', '')}"]
+  ...  ELSE IF  'agreements' in '${field_name}'  Get Info From Agreements  ${username}  ${tender_uaid}  ${field_name}
 #  ...  ELSE IF  'contracts' in '${field_name}'  Get info from contracts  ${username}  ${tender_uaid}  ${field_name}
   ...  ELSE IF  '${field_name}' == 'cause'  Get Element Attribute  xpath=//*[@data-test-id="${field_name}"]@data-test-cause
   ...  ELSE IF  '${field_name}' == 'procuringEntity.identifier.legalName'  Get Text  xpath=//*[@data-test-id="procuringEntity.name"]
@@ -1281,6 +1281,17 @@ Get info from funders
 #  ...  ELSE IF  'countryName' in ${field_name}  Get Text
   ${value}=  Get Text  xpath=//*[@data-test-id="${field_name.replace('[0]', '')}"]
   [Return]  ${value}
+
+Get Info From Agreements
+  [Arguments]  ${username}  ${tender_uaid}  ${field_name}
+  ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
+  Run Keyword If  'agreements.status' in '${fild_name}' Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
+  ${status}=  Run Keyword And Return Status  Page Should Contain Element  xpath=//div[@class="col-xs-12 col-sm-6 col-md-8 item-bl_val"][contains(text(),"Укладена рамкова угода")]
+  ${value}=  Get Text  xpath=//*[@data-test-id="${field_name}"]
+  ${value}=  Set Variable If  ${status}  active  ${value}
+  [Return]  ${value}
+
+
 
 Отримати інформацію із предмету
   [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
@@ -1661,6 +1672,11 @@ Add annual costs reduction
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   Log  Необхідні дії було виконано у "Завантажити документ рішення кваліфікаційної комісії"
 
+Make Global Qualifications List
+  ${internal_id}=  Get Text  xpath=//div[@data-test-id="id"]
+  ${qualifications_lst}=  retrieve_qaulifications_range  ${internal_id}
+  Set Global Variable  ${qualifications_lst}  ${qualifications_lst}
+
 Підтвердити кваліфікацію
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
   ${document}=  get_upload_file_path
@@ -1669,10 +1685,13 @@ Add annual costs reduction
 #  Wait And Select From List By Value  xpath=//select[@id="document-type-0"]  awardNotice
   ${qualification_num}=  Convert To Integer  ${qualification_num}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If  "${TEST NAME}" == "Можливість підтвердити першу пропозицію кваліфікації"  Make Global Qualifications List
+  ${company_name}=  Set Variable  ${qualifications_lst[${qualification_num}]}
+
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
 #  ${status}=  Run Keyword And Return Status  Wait Until Element Is Visible  xpath=//button[@data-dismiss="modal"]  5
 #  Run Keyword If  ${status}  Закрити модалку  xpath=//button[@data-dismiss="modal"]
-  Дочекатися І Клікнути  xpath=//*[@data-mtitle="№" and text()=${qualification_num * -1 + 1}]/..//descendant::button[@class="mk-btn mk-btn_accept"]
+  Дочекатися І Клікнути  xpath=//*[text()="${company_name}"]/../../descendant::button[@class="mk-btn mk-btn_accept"]
 #  ...  ELSE  Дочекатися І Клікнути  xpath=//*[@name="Qualifications[${qualification_num * -1}][qualified]"]/ancestor::div[@class="col-xs-12"]/descendant::button[@class="mk-btn mk-btn_accept"]
   Wait Element Animation  xpath=//select[@class="choose_prequalification"]
 #  Дочекатися І Клікнути  xpath=//*[@name="Qualifications[${qualification_num}][action]"]
@@ -1689,17 +1708,18 @@ Add annual costs reduction
 Відхилити кваліфікацію
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
   ${qualification_num}=  Convert To Integer  ${qualification_num}
+  ${company_name}=  Set Variable  ${qualifications_lst[${qualification_num}]}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
 #  Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")]
 #  ...  ELSE  Дочекатися І Клікнути  xpath=(//*[contains(@id,"modal-qualification") and contains(@class,"mk-btn mk-btn_accept")])[${qualification_num + 1}]
 #  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="Qualifications[${qualification_num}][action]"]
-  Дочекатися І Клікнути  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::button[@class="mk-btn mk-btn_accept"]
-  Wait Element Animation  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::select[@class="choose_prequalification"]
-  Select From list By Index  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::select[@class="choose_prequalification"]  1
-  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає квалiфiкацiйним критерiям."]
-  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Наявнi пiдстави, зазначенi у статтi 17."]
-  Select Checkbox  xpath=//*[@data-mtitle="№" and contains(text(),"${qualification_num + 1}")]/../descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає вимогам тендерної документацiї."]
+  Дочекатися І Клікнути  xpath=//*[text()="${company_name}"]/../../descendant::button[@class="mk-btn mk-btn_accept"]
+  Wait Element Animation  xpath=//*[text()="${company_name}"]/../../descendant::select[@class="choose_prequalification"]
+  Select From list By Index  xpath=//*[text()="${company_name}"]/../../descendant::select[@class="choose_prequalification"]  1
+  Select Checkbox  xpath=//*[text()="${company_name}"]/../../descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає квалiфiкацiйним критерiям."]
+  Select Checkbox  xpath=//*[text()="${company_name}"]/../../descendant::*[@name="Qualifications[cause][]"][@value="Наявнi пiдстави, зазначенi у статтi 17."]
+  Select Checkbox  xpath=//*[text()="${company_name}"]/../../descendant::*[@name="Qualifications[cause][]"][@value="Не вiдповiдає вимогам тендерної документацiї."]
   Дочекатися І Клікнути  xpath=//*[@class="mk-btn mk-btn_danger btn-submitform_qualification"]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
 
@@ -1709,11 +1729,12 @@ Add annual costs reduction
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   ${qualification_num}=  Convert To Integer  ${qualification_num}
+  ${company_name}=  Set Variable  ${qualifications_lst[${qualification_num}]}
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
 #  Run Keyword If  '${mode}' == 'openeu'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[${qualification_num + 1}]
 #  ...  ELSE IF  '${mode}' == 'open_framework'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[${qualification_num + 1}]
 #  ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="cancel_prequalification"]
-  Дочекатися І Клікнути  xpath=//*[@data-mtitle="№" and text()=${qualification_num + 1}]/..//descendant::button[@name="cancel_prequalification"]
+  Дочекатися І Клікнути  xpath=//*[text()="${company_name}"]/../../descendant::button[@name="cancel_prequalification"]
 
 
 tenderonline.Скасування рішення кваліфікаційної комісії
