@@ -7,6 +7,7 @@ from pytz import timezone
 import urllib
 import json
 import os
+import requests
 
 
 def convert_time(date):
@@ -119,7 +120,7 @@ def convert_string_from_dict_tenderonline(string):
         u'без відповіді': u'ignored',
         u'відкликано скаржником': u'stopping',
         u'Без ответа': u'ignored',
-        u'contract.status.activ': u'Договір активовано',
+        u'Укладена Рамкова угода': u'complete',
     }.get(string, string)
 
 
@@ -230,3 +231,18 @@ def add_second_sign_after_point(amount):
 
 def get_upload_file_path():
     return os.path.join(os.getcwd(), 'src/robot_tests.broker.tenderonline/testFileForUpload.txt')
+
+
+def get_company_name_by_bid_id(bid_id, data):
+    for bid in data['data']['bids']:
+        if bid['id'] == bid_id:
+            return bid['tenderers'][0]['name']
+
+
+def retrieve_qaulifications_range(internal_id):
+    resp_data = requests.get("https://lb-api-staging.prozorro.gov.ua/api/2.4/tenders/{}".format(internal_id))
+    data = json.loads(resp_data.content)
+    lst = list()
+    for index in range(len(data['data']['qualifications'])):
+        lst.append(get_company_name_by_bid_id(data['data']['qualifications'][index]['bidID'], data))
+    return lst
