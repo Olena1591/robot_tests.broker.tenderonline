@@ -1286,7 +1286,7 @@ Get info from funders
 Get Info From Agreements
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
   ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
-  Run Keyword If  'agreements.status' in '${fild_name}' Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
+  Run Keyword If  'agreements.status' in ${fild_name}  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   ${status}=  Run Keyword And Return Status  Page Should Contain Element  xpath=//div[@class="col-xs-12 col-sm-6 col-md-8 item-bl_val"][contains(text(),"Укладена рамкова угода")]
   ${value}=  Get Text  xpath=//*[@data-test-id="${field_name}"]
   ${value}=  Set Variable If  ${status}  active  ${value}
@@ -1935,7 +1935,8 @@ Scroll To Element
   [Arguments]  ${hide_sidebar}=${True}
   Wait Until Page Contains  Накласти ЕЦП/КЕП
   Дочекатися І Клікнути  xpath=//button[@class="sign_btn mk-btn mk-btn_default"][contains(text(),"Накласти ЕЦП/КЕП")]
-  Wait Until Page Contains Element  xpath=//button[@id="SignDataButton"]
+#  Wait Until Page Contains Element  xpath=//button[@id="SignDataButton"]
+  Wait Until Keyword Succeeds  30 x  1 s  Page Should Contain Element  xpath=//button[@id="SignDataButton"]
   Дочекатися І Клікнути  xpath=//select[@id="CAsServersSelect"]
   ${status}=  Run Keyword And Return Status  Wait Until Keyword Succeeds  30 x  1 s  Page Should Contain  Оберіть файл з особистим ключем (зазвичай з ім'ям Key-6.dat) та вкажіть пароль захисту
   Run Keyword If  ${status}  Wait Until Keyword Succeeds  30 x  20 s  Run Keywords
