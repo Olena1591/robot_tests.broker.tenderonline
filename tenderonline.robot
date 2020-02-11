@@ -1944,9 +1944,12 @@ Scroll To Element
 Накласти ЄЦП
   [Arguments]  ${hide_sidebar}=${True}
   Wait Until Page Contains  Накласти ЕЦП/КЕП
-  Дочекатися І Клікнути  xpath=//button[@class="sign_btn mk-btn mk-btn_default"][contains(text(),"Накласти ЕЦП/КЕП")]
-#  Wait Until Page Contains Element  xpath=//button[@id="SignDataButton"]
-  Wait Until Keyword Succeeds  30 x  1 s  Page Should Contain Element  xpath=//button[@id="SignDataButton"]
+#  Дочекатися І Клікнути  xpath=//button[@class="sign_btn mk-btn mk-btn_default"][contains(text(),"Накласти ЕЦП/КЕП")]
+##  Wait Until Page Contains Element  xpath=//button[@id="SignDataButton"]
+#  Wait Until Keyword Succeeds  30 x  1 s  Page Should Contain Element  xpath=//button[@id="SignDataButton"]
+  Wait Until Keyword Succeeds  30 x  20 s  Run Keywords
+  ...  Дочекатися І Клікнути  xpath=//button[@data-test-id="SignDataButton"]
+  ...  AND  Wait Until Page Contains Element  xpath=//button[@id="SignDataButton"]
   Дочекатися І Клікнути  xpath=//select[@id="CAsServersSelect"]
   ${status}=  Run Keyword And Return Status  Wait Until Keyword Succeeds  30 x  1 s  Page Should Contain  Оберіть файл з особистим ключем (зазвичай з ім'ям Key-6.dat) та вкажіть пароль захисту
   Run Keyword If  ${status}  Wait Until Keyword Succeeds  30 x  20 s  Run Keywords
