@@ -1397,6 +1397,7 @@ Get Info From Agreements
   [Arguments]  ${username}  ${tender_uaid}  ${field}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Run Keyword If  '${mode}' == 'open_esco'  Sleep  700
+  ...  ELSE IF '${mode}' == 'openua_defense'  Sleep  750
   ...  ELSE  Sleep  500
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
   ${is_edited}=  Run Keyword And Return Status  Page Should Contain Element  xpath=//span[@class="label label-danger"][contains(text(),"Недійсна")] /ancestor::div[@class="pull-right"]
@@ -1467,7 +1468,7 @@ Get Info From Complaints
   ...  Click Element  xpath=//button[@class="mk-btn mk-btn_default js-btn-contract-award"]
   ...  AND  Wait Element Animation  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
   ...  AND  Page Should Contain  Договір активовано
-  ${value}=  Set Variable If  ${status}  active
+  ${value}=  Set Variable If  ${status}  active  pending
   ${is_modal_open}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
   Run Keyword If  ${is_modal_open}  Run Keywords
   ...  Click Element  xpath=//*[contains(@id,"modal-award")]/descendant::button[@class="close"]
