@@ -113,6 +113,7 @@ Login
   Wait Element Animation  id=search_code
   Input Text  id=search_code  ${tender_data.data.classification.id}
   Wait Until Page Contains  ${tender_data.data.classification.id}
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[@id="${tender_data.data.classification.id}"]
   Click element  xpath=//div[@id="${tender_data.data.classification.id}"]
   Click element  xpath=//button[@id="btn-ok"]
   Wait until element is not visible  xpath=//div[@id="mbody"]
@@ -157,6 +158,7 @@ Add item plan
   Wait Element Animation  id=search_code
   Input Text  id=search_code  ${item.classification.id}
   Wait Until Page Contains  ${item.classification.id}
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[@id="${item.classification.id}"]
   Click element  xpath=//div[@id="${item.classification.id}"]
   Click element  xpath=//button[@id="btn-ok"]
 
@@ -1227,7 +1229,7 @@ tenderonline.Створити скаргу про виправлення виз�
 
   Run Keyword If  'title' in '${field_name}'  Execute Javascript  $("[data-test-id|='title']").css("text-transform", "unset")
 #  Run Keyword If  "статусу непідписаної угоди з постачальником" in "${TEST_NAME}"  Дочекатися І Клікнути  xpath=//div[@class="modal-header"]/descendant::*[contains(text(),"Документи кваліфікації")]/preceding-sibling::*[@class="close"]
-  Run Keyword If  'status' in '${field_name}'  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
+  Run Keyword If  'status' in '${field_name}' and '${mode}' != 'negotiation'  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
 #  Run Keyword And Ignore Error  Click Element  xpath=//button[@data-dismiss="modal"]
   Run Keyword If  '${field_name}' == 'qualificationPeriod.endDate'  Wait Until Keyword Succeeds  10 x  60 s  Run Keywords
   ...  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
@@ -1287,7 +1289,7 @@ Get info from funders
 Get Info From Agreements
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
   ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
-  Run Keyword If  'agreements.status' in ${fild_name}  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
+  Run Keyword If  'agreements.status' in '${field_name}'  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   ${status}=  Run Keyword And Return Status  Page Should Contain Element  xpath=//div[@class="col-xs-12 col-sm-6 col-md-8 item-bl_val"][contains(text(),"Укладена рамкова угода")]
   ${value}=  Get Text  xpath=//*[@data-test-id="${field_name}"]
   ${value}=  Set Variable If  ${status}  active  ${value}
@@ -1442,6 +1444,8 @@ Get Info From Agreements
   ...  ELSE IF  'complaintPeriod.endDate' in '${field_name}'  Get Info From Complaints  ${username}  ${tender_uaid}  ${field_name}
   ...  ELSE IF  'legalName' in '${field_name}'  Get Text  xpath=//*[@data-test-id="awards.suppliers.name"]
   ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name.replace("[0]","")}"]
+  ${is_modal_open}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//div[@class="modal-header"]/descendant::*[contains(text(),"Документи кваліфікації")]
+  Run Keyword If  ${is_modal_open}  Click Element  xpath=//*[contains(text(),"Документи кваліфікації")]/preceding-sibling::button[@data-dismiss="modal"]
   [Return]  ${value.split(" - ")[-1]}
 
 Get Info From Complaints
@@ -1665,15 +1669,22 @@ Add annual costs reduction
 #  ...  AND  Click Element  xpath=//button[@class="btn btn-success"]
 #  ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
   ...  AND  Click Element  xpath=//button[@class="btn btn-danger"]
-  ...  AND  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//button[contains(@id, "modal-award-qualification-button")]
-  ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
-  ...  AND  Накласти ЄЦП  ${False}
-#  ...  AND  Накласти ЄЦП на контракт
+#  ...  AND  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//button[contains(@id, "modal-award-qualification-button")]
+#  ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
+#  ...  AND  Накласти ЄЦП  ${False}
+##  ...  AND  Накласти ЄЦП на контракт
 
 
 Підтвердити постачальника
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
-  Log  Необхідні дії було виконано у "Завантажити документ рішення кваліфікаційної комісії"
+#  Log  Необхідні дії було виконано у "Завантажити документ рішення кваліфікаційної комісії"
+  ${award_num}=  Convert To Integer  ${award_num}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  Run Keyword If  '${mode}' != 'belowThreshold'  Run Keywords
+  ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
+  ...  AND  Накласти ЄЦП  ${False}
+  ...  ELSE  Log  Необхідні дії було виконано у "Завантажити документ рішення кваліфікаційної комісії"
+#  ...  AND  Накласти ЄЦП на контракт
 
 Make Global Qualifications List
   ${internal_id}=  Get Text  xpath=//div[@data-test-id="id"]
@@ -1715,6 +1726,7 @@ tenderonline.Затвердити постачальників
   Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_accept js-btn-agreement-action"]
   Wait Element Animation  xpath=//button[@class="btn mk-btn mk-btn_accept"]
   Дочекатися І Клікнути  xpath=//button[@class="btn mk-btn mk-btn_accept"]
+  Sleep  1000
 
 Відхилити кваліфікацію
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
