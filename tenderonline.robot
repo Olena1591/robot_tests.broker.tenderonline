@@ -1745,6 +1745,7 @@ tenderonline.Затвердити постачальників
 #  ...  ELSE IF  '${mode}' == 'open_framework'  Дочекатися І Клікнути  xpath=(//button[@name="cancel_prequalification"])[${qualification_num + 1}]
 #  ...  ELSE  Дочекатися І Клікнути  xpath=//button[@name="cancel_prequalification"]
   Дочекатися І Клікнути  xpath=//*[text()="${company_name}"]/../../descendant::button[@name="cancel_prequalification"]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//*[text()="${company_name}"]/../../descendant::button[@class="mk-btn mk-btn_accept"]
 
 
 tenderonline.Скасування рішення кваліфікаційної комісії
