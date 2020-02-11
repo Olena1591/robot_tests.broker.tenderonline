@@ -1682,7 +1682,7 @@ Add annual costs reduction
   ${award_num}=  Convert To Integer  ${award_num}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Run Keyword If  '${mode}' != 'belowThreshold'  Run Keywords
-  ...  AND  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
+  ...  Дочекатися І Клікнути  xpath=//button[contains(@id, "modal-award-qualification-button")]
   ...  AND  Накласти ЄЦП  ${False}
   ...  ELSE  Log  Необхідні дії було виконано у "Завантажити документ рішення кваліфікаційної комісії"
 #  ...  AND  Накласти ЄЦП на контракт
