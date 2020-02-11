@@ -873,7 +873,8 @@ tenderonline.Створити лот  ${username}  ${tender_uaid}  ${lot}  ${ite
   Дочекатися І Клікнути   xpath=(//div[contains(@class,"features_wrapper")]/descendant::button[contains(@class, "add_feature")])[last()]
   Додати показник   ${feature}  ${EMPTY}
   Дочекатися І Клікнути  xpath=//button[contains(@class,'btn_submit_form')]
-  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(@class, 'alert-success')]
+
 
 Додати неціновий показник на лот
   [Arguments]  ${username}  ${tender_uaid}  ${feature}  ${lot_id}
