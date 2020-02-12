@@ -331,7 +331,7 @@ Update plan items info
 #  Run Keyword If  "aboveThreshold" in "${tender_data.data.procurementMethodType}"  Conv And Select From List By Value  xpath=(//select[@id="guarantee-exist"])[3]  1
 #  ...  ELSE  Conv And Select From List By Value  xpath=(//select[@id="guarantee-exist"])[1]  1
 #  Conv And Select From List By Value  xpath=(//*[@data-test-id="guarantee-exist"])[${index_strategy}]  1
-  Execute Javascript  document.querySelector('[name="fast_forward"]').checked;
+#  Execute Javascript  document.querySelector('[name="fast_forward"]').checked;
 
 #  Wait Until Keyword Succeeds  10 x  1 s  Check It  document.querySelector('[name="fast_forward"]').setAttribute("checked", 'checked');
 
@@ -1865,33 +1865,46 @@ Disqualification of the first winner
 
 tenderonline.Встановити ціну за одиницю для контракту
   [Arguments]  ${username}  ${tender_uaid}  ${contract_data}
-  ${company_name}=  Set Variable  ${contract_data.data.suppliers.identifier.legalName}
+  ${company_name}=  Set Variable  ${contract_data.data.suppliers[0].identifier.legalName}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Дочекатися І Клікнути  xpath=//div[contains(text(), "${company_name}")]/ancestor::div/descendant::button[contains(text(), "Ціна за одиницю")]
   Wait Element Animation  xpath=//div[contains(text(), "${company_name}")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
-  Input Text  xpath=//div[contains(text(), "${company_name}")]/ancestor::div[@class="modal-content"]/descendant::input[@class="unit-prices-value-amount"]  ${contract_data.data.unitPrices.value.amount}
+  Input Text  xpath=//div[contains(text(), "${company_name}")]/ancestor::div[@class="modal-content"]/descendant::input[@class="unit-prices-value-amount"]  ${contract_data.data.unitPrices[0].value.amount}
   Дочекатися І Клікнути  xpath=//div[contains(text(), "${company_name}")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(text(), "${company_name}")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
 
 
 tenderonline.Зареєструвати угоду
   [Arguments]  ${username}  ${tender_uaid}  ${period}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  ${startDate}=  convert_date_plan_to_ tenderonline_format  ${value['startDate']}
+  ${endDate}=  convert_date_plan_to_ tenderonline_format  ${value['endDate']}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Дочекатися І Клікнути  xpath=//button[@id="agreement-modal-info"]
   Wait Element Animation  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Input Text  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreement-agreementnumber"]  777
   Click Element  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreement-datesigned"]
-  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-startdate"]
-  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-enddate"]
+  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-startdate"]  ${period.startDate}
+  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-enddate"]  ${period.endDate}
   Дочекатися І Клікнути  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Дочекатися І Клікнути  xpath=//div[contains(text(), "Активувати рамкову угоду")]
-  Wait Element Animation  xpath=//button[@class="sign_btn mk-btn mk-btn_default"]
-  Click Element  xpath=//button[@class="sign_btn mk-btn mk-btn_default"]
+  Wait Element Animation  xpath=//button[@data-test-id="SignDataButton"]
   Накласти ЄЦП  ${False}
+  Sleep  1000
+  Wait Until Element Is Visible  xpath=//*[contains(@href,"/agreements/view/")]  20
+  ${agreement_uaid}=  Get Text  xpath=//*[contains(@href,"/agreements/view/")]
+  [Return]  ${agreement_uaid}
+
 
 tenderonline.Пошук угоди по ідентифікатору
   [Arguments]  ${username}  ${agreement_uaid}  ${save_key}=agreement_data
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
+  Wait Until Element Is Visible  xpath=//*[contains(@href,"/agreements/view/")]  10
+  Click Element  xpath=//*[contains(@href,"/agreements/view/")]
+
+
 
 
 ###############################################################################################################
@@ -1930,7 +1943,7 @@ Conv And Select From List By Value
 
 Input Date
   [Arguments]  ${elem_locator}  ${date}
-  ${date}=  convert_datetime_to_ tenderonline_format  ${date}
+  ${date}=  convert_datetime_to_tenderonline_format  ${date}
 #  Input Text  ${elem_locator}  ${date}
   Execute Javascript  document.querySelector('[${elem_locator}]').value="${date}"
 
