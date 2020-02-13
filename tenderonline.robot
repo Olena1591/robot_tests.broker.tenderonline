@@ -41,7 +41,7 @@ ${locator.plan.tender.procurementMethodType}=  xpath=//*[@data-test-id="procurem
   [Arguments]  ${username}
   ${chromeOptions}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
 #  ${prefs} =    Create Dictionary    download.default_directory=${downloadDir}
-#  Call Method    ${chromeOptions}    add_argument    --headless
+  Call Method    ${chromeOptions}    add_argument    --headless
 
 
   Create Webdriver    ${USERS.users['${username}'].browser}  alias=${username}   chrome_options=${chromeOptions}
@@ -1894,10 +1894,10 @@ tenderonline.Зареєструвати угоду
   Дочекатися І Клікнути  xpath=//button[contains(@class, "mk-btn mk-btn_accept offersFinishBtn") and contains(text(), "Активувати рамкову угоду")]
   Wait Element Animation  xpath=//button[@data-test-id="SignDataButton"]
   Накласти ЄЦП  ${False}
-  Sleep  1000
-  Wait Until Element Is Visible  xpath=//*[contains(@href,"/agreements/view/")]  20
-  ${agreement_uaid}=  Get Text  xpath=//*[contains(@href,"/agreements/view/")]
-  [Return]  ${agreement_uaid}
+#  Sleep  1000
+#  Wait Until Element Is Visible  xpath=//*[contains(@href,"/agreements/view/")]  20
+#  ${agreement_uaid}=  Get Text  xpath=//*[contains(@href,"/agreements/view/")]
+#  [Return]  ${agreement_uaid}
 
 
 tenderonline.Пошук угоди по ідентифікатору
