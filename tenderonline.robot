@@ -652,7 +652,7 @@ Add Item Tender
   Дочекатися І Клікнути  xpath=//select[@name="Tender[features][${feature_index}][relatedItem]"]/descendant::option[contains(text(),"${relatedItem}")]
   :FOR   ${index}   IN RANGE   ${enum_length}
   \   Run Keyword if   ${index} != 0   Дочекатися І Клікнути   xpath=//input[@name="Tender[features][${feature_index}][title]"]/ancestor::div[@class="feature"]/descendant::button[contains(@class,"add_feature_enum")]
-  \   Sleep  5
+  \   Wait Until Keyword Succeeds  10 x 2 s Page Should Contain Element  name=Tender[features][${feature_index}][enum][${index}][title]
   \   Додати опцію   ${feature.enum[${index}]}   ${index}   ${feature_index}
 
 tenderonline.Редагувати угоду
@@ -1886,8 +1886,8 @@ tenderonline.Зареєструвати угоду
   Wait Element Animation  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Input Text  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreement-agreementnumber"]  777
   Click Element  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreement-datesigned"]
-  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-startdate"]  ${startDate}
-  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-enddate"]  ${endDate}
+  Input Text  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-startdate"]  ${startDate}
+  Input Text  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-enddate"]  ${endDate}
   Дочекатися І Клікнути  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Дочекатися І Клікнути  xpath=//div[contains(text(), "Активувати рамкову угоду")]
   Wait Element Animation  xpath=//button[@data-test-id="SignDataButton"]
