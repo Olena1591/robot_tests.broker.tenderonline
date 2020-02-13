@@ -376,10 +376,10 @@ Update plan items info
 
 
   Run Keyword If  ${meat} > 0  Додати нецінові критерії  ${tender_data}
-  Run Keyword If  "${tender_data.data.procurementMethodType}" != "aboveThresholdUA"  Дочекатися І Клікнути  xpath=//input[@data-test-id="fast_forward"]
-  Log  ${SUITE_NAME}
-  Run Keyword If  "${SUITE_NAME}" == "Tests Files.Complaints"  Execute Javascript  $('input[name="accelerator"]').val('${custom_acceleration}')
-  Get Element Attribute  xpath=//input[@name="accelerator"]@value
+#  Run Keyword If  "${tender_data.data.procurementMethodType}" != "aboveThresholdUA"  Дочекатися І Клікнути  xpath=//input[@data-test-id="fast_forward"]
+#  Log  ${SUITE_NAME}
+#  Run Keyword If  "${SUITE_NAME}" == "Tests Files.Complaints"  Execute Javascript  $('input[name="accelerator"]').val('${custom_acceleration}')
+#  Get Element Attribute  xpath=//input[@name="accelerator"]@value
   Select From List By Index  id=contact-point-select  1
 #  Select Checkbox  xpath=//input[@name="fast_forward"]
   Wait Until Keyword Succeeds  5 x  1s  Run Keywords
