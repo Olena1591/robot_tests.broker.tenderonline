@@ -1398,7 +1398,7 @@ Get Info From Agreements
   [Arguments]  ${username}  ${tender_uaid}  ${field}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Run Keyword If  '${mode}' == 'open_esco'  Sleep  700
-  ...  ELSE IF  '${mode}' == 'openua_defense'  Sleep  750
+  ...  ELSE IF  '${mode}' == 'openua_defense'  Sleep  100
   ...  ELSE  Sleep  500
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
   ${is_edited}=  Run Keyword And Return Status  Page Should Contain Element  xpath=//span[@class="label label-danger"][contains(text(),"Недійсна")] /ancestor::div[@class="pull-right"]
