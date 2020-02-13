@@ -1253,6 +1253,7 @@ tenderonline.Створити скаргу про виправлення виз�
   ...  ELSE IF   "stones" in "${field_name}"  Get Info From Tender Milestones  ${field_name}
   ...  ELSE IF   "fundingKind" in "${field_name}"  Get Text  xpath=//*[@data-test-id="fundingKind"]
   ...  ELSE IF   "clarificationsUntil" in "${field_name}"  Get Text  xpath=//*[@data-test-id="clarificationsUntil"]
+  ...  ELSE IF  'lots[0].auctionPeriod.startDate' in '${field_name}'  Get Text  xpath=//*[@data-test-id="${field_name.replace('[0]', '')}"]
   ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
   ${value}=  adapt_view_tender_data  ${value}  ${field_name}
   [Return]  ${value}
@@ -1868,7 +1869,7 @@ tenderonline.Встановити ціну за одиницю для контр
   ${company_name}=  Set Variable  ${contract_data.data.suppliers[0].identifier.legalName}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
-  Дочекатися І Клікнути  xpath=//div[contains(text(), "${company_name}")]/ancestor::div/descendant::button[contains(text(), "Ціна за одиницю")]
+  Дочекатися І Клікнути  xpath=//div[contains(text(),"${company_name}")]/../descendant::button[contains(text(), "Ціна за одиницю")]
   Wait Element Animation  xpath=//div[contains(text(), "${company_name}")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Input Text  xpath=//div[contains(text(), "${company_name}")]/ancestor::div[@class="modal-content"]/descendant::input[@class="unit-prices-value-amount"]  ${contract_data.data.unitPrices[0].value.amount}
   Дочекатися І Клікнути  xpath=//div[contains(text(), "${company_name}")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
@@ -1878,15 +1879,15 @@ tenderonline.Встановити ціну за одиницю для контр
 tenderonline.Зареєструвати угоду
   [Arguments]  ${username}  ${tender_uaid}  ${period}
   tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-  ${startDate}=  convert_date_plan_to_ tenderonline_format  ${value['startDate']}
-  ${endDate}=  convert_date_plan_to_ tenderonline_format  ${value['endDate']}
+  ${startDate}=  convert_date_plan_to_ tenderonline_format  ${period['startDate']}
+  ${endDate}=  convert_date_plan_to_ tenderonline_format  ${period['endDate']}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/award")]
   Дочекатися І Клікнути  xpath=//button[@id="agreement-modal-info"]
   Wait Element Animation  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Input Text  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreement-agreementnumber"]  777
   Click Element  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreement-datesigned"]
-  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-startdate"]  ${period.startDate}
-  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-enddate"]  ${period.endDate}
+  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-startdate"]  ${startDate}
+  Input Date  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-enddate"]  ${endDate}
   Дочекатися І Клікнути  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Дочекатися І Клікнути  xpath=//div[contains(text(), "Активувати рамкову угоду")]
   Wait Element Animation  xpath=//button[@data-test-id="SignDataButton"]
