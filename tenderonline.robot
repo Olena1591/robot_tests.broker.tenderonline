@@ -41,7 +41,7 @@ ${locator.plan.tender.procurementMethodType}=  xpath=//*[@data-test-id="procurem
   [Arguments]  ${username}
   ${chromeOptions}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
 #  ${prefs} =    Create Dictionary    download.default_directory=${downloadDir}
-  Call Method    ${chromeOptions}    add_argument    --headless
+#  Call Method    ${chromeOptions}    add_argument    --headless
 
 
   Create Webdriver    ${USERS.users['${username}'].browser}  alias=${username}   chrome_options=${chromeOptions}
@@ -1888,10 +1888,9 @@ tenderonline.Зареєструвати угоду
   Click Element  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreement-datesigned"]
   Input Text  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-startdate"]  ${startDate}
   Execute Javascript   document.querySelector('[name="Agreement[period][endDate]"]').value="${endDate}"
-
-#  Input Text  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::input[@id="agreementperiod-enddate"]  ${endDate}
-  Дочекатися І Клікнути  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
-  Wait Until Keyword Succeeds  10 x  1 s  Page Should Not Contain Element  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
+  Wait Until Keyword Succeeds  10 x  1 s  Run Keywords
+  ...  Дочекатися І Клікнути  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
+  ...  AND  Wait Until Keyword Succeeds  10 x  1 s  Element Should Not Be Visible  xpath=//div[contains(text(), "Інформація по угоді")]/ancestor::div[@class="modal-content"]/descendant::button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Дочекатися І Клікнути  xpath=//button[contains(@class, "mk-btn mk-btn_accept offersFinishBtn") and contains(text(), "Активувати рамкову угоду")]
   Wait Element Animation  xpath=//button[@data-test-id="SignDataButton"]
   Накласти ЄЦП  ${False}

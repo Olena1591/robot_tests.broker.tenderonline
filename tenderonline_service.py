@@ -196,6 +196,8 @@ def adapt_view_lot_data(value, field_name):
         value = ' '.join(value.split(' ')[-3:]).strip()
     elif 'minimalStep.amount' in field_name:
         value = float("".join(value.split(' ')[:-1]))
+    elif 'Date' in field_name:
+        value = convert_time(value)
     return convert_string_from_dict_tenderonline(value)
 
 
