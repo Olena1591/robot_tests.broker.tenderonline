@@ -13,20 +13,7 @@ ${index}=  0
 #${unit_code}=  0
 #${locator.plan.status}=  xpath=//div[@data-test-id="status"]
 ${locator.plan.tender.procurementMethodType}=  xpath=//*[@data-test-id="procurementMethodType"]
-#${locator.plan.budget.amount}=  xpath=//*[contains(text(),"Очікувана вартість")]/following-sibling::div
-#${locator.plan.budget.description}=  xpath=//div[@data-test-id="description"]
-#${locator.plan.budget.currency}=  xpath=//span[@data-test-id="value.currency"]
-#${locator.plan.procuringEntity.name}=  xpath=//*[@data-test-id="procuringEntity.name"]
-#${locator.plan.procuringEntity.identifier.scheme}=  xpath=//*[@data-test-id="procuringEntity.address"]
-#${locator.plan.procuringEntity.identifier.id}=  xpath=//*[@data-test-id="procuringEntity.identifier.id"]
-#${locator.plan.procuringEntity.identifier.legalName}=  xpath=//*[@data-test-id="procuringEntity.name"]
-#${locator.plan.classification.description}=  xpath=(//*[contains(text(),"Код ДК 021-2015 (CPV)") ]/following-sibling::div)[1]
-#${locator.plan.classification.scheme}=  xpath=//div[contains(text(), 'Код ДК 021-2015')][@class="col-xs-12 col-sm-6 col-md-4 item-bl_t"]
-#${locator.plan.classification.id}=  xpath=//div[contains(text(), 'Код ДК 021-2015')][@class="col-xs-12 col-sm-6 col-md-4 item-bl_t"][${cpv_id}]
-#${locator.plan.items.description}=  xpath=(//div[@data-test-id="items.description"])[${index + 1}]
-#${locator.plan.items.quantity}=  xpath=//*[@data-test-id="items.quantity"][${index + 1}]
-#${locator.plan.items.deliveryDate.endDate}=  xpath=//*[contains(text(),"Кінцевий строк поставки товарів, виконання робіт чи надання послуг") ]/following-sibling::div ${index + 1}
-#${locator.plan.items.unit.code}=  xpath=//*[contains(text(),"Кiлькiсть") ]/following-sibling::div[${index + 1}]
+
 
 
 
@@ -119,7 +106,6 @@ Login
   Wait until element is not visible  xpath=//div[@id="mbody"]
   Wait until element is visible  xpath=//button[@class="mk-btn mk-btn_default add_plan_breakdown"]
 
-#  Conv And Select From List By Value  name=Plan[additionalClassifications][0][dkType]  ${tender_data.data.additionalClassifications}
   :FOR   ${breakdown_index}   IN RANGE   ${number_of_breakdowns}
   \  Add breakdown  ${breakdown_index}  ${tender_data.data.budget.breakdown[${breakdown_index}]}
   :FOR  ${item_index}   IN RANGE   ${number_of_items}
@@ -228,8 +214,7 @@ Get Info From Plan Items
   ...  ELSE IF  "budget.period" in "${field_name}"  Update plan budget.period  ${username}  ${planID}  ${field_name}  ${value}
   ...  ELSE  Input text  xpath=//*[@data-test-id="${field_name}"]  ${value}
   Дочекатися І Клікнути  xpath=//button[@name="publish"]
-#  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
-#  Wait Until Keyword Succeeds  20 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+
 
 Update plan budget.period
   [Arguments]  ${username}  ${planID}  ${field_name}  ${value}
@@ -238,9 +223,7 @@ Update plan budget.period
   ${endDate}=  convert_date_plan_to_ tenderonline_format  ${value['endDate']}
   Run Keyword If  "startDate" in "${value['startDate']}"  Execute Javascript  document.querySelector('[id="period-startdate"]').value="${startDate}}"
   ...  ELSE  Execute Javascript  document.querySelector('[id="period-enddate"]').value="${endDate}"
-#  Дочекатися І Клікнути  xpath=//button[@name="publish"]
-##  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
-#  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+
 
 Update plan items info
   [Arguments]  ${username}  ${planID}  ${field_name}  ${value}
@@ -251,9 +234,6 @@ Update plan items info
   Run Keyword If
   ...  "deliveryDate.endDate" in "${field_name}"  Execute Javascript  document.querySelector('[name="Plan[items][${index + 1}][deliveryDate][endDate]"]').value="${data}"
   ...  ELSE IF  "quantity" in "${field_name}"  Input text  xpath=//*[@name="Plan[items][${index + 1}][quantity]"]  ${value}
-#  Дочекатися І Клікнути  xpath=//button[@name="publish"]
-#  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
-#  Wait Until Page Contains Element  xpath=//a[contains(text(),'Редагувати')]
 
 
 Видалити предмет закупівлі плану
@@ -331,7 +311,7 @@ Update plan items info
 #  Run Keyword If  "aboveThreshold" in "${tender_data.data.procurementMethodType}"  Conv And Select From List By Value  xpath=(//select[@id="guarantee-exist"])[3]  1
 #  ...  ELSE  Conv And Select From List By Value  xpath=(//select[@id="guarantee-exist"])[1]  1
 #  Conv And Select From List By Value  xpath=(//*[@data-test-id="guarantee-exist"])[${index_strategy}]  1
-#  Execute Javascript  document.querySelector('[name="fast_forward"]').checked;
+  Run Keyword If  '${mode}' == 'open_framework'  Execute Javascript  document.querySelector('[name="fast_forward"]').checked
 
 #  Wait Until Keyword Succeeds  10 x  1 s  Check It  document.querySelector('[name="fast_forward"]').setAttribute("checked", 'checked');
 
@@ -343,8 +323,6 @@ Update plan items info
   ...  ELSE IF  "${tender_data.data.procurementMethodType}" == "negotiation"  Заповнити поля для переговорної процедури  ${tender_data}
   ...  ELSE IF  "${tender_data.data.procurementMethodType}" == "competitiveDialogueEU"  Заповнити поля для конкурентного діалогу  ${tender_data}
   ...  ELSE IF  "${tender_data.data.procurementMethodType}" == "closeFrameworkAgreementUA"  Заповнити поля для рамкової угоди  ${tender_data}
-#  ...  ELSE IF  "${tender_data.data.procurementMethodType}" == "reporting"  Wait And Select From List By Value  name=tender_method  limited_reporting
-#  Conv And Select From List By Value  name=Tender[value][valueAddedTaxIncluded]  ${valueAddedTaxIncluded}
 
 
 #  Run Keyword If  "below" in "${tender_data.data.procurementMethodType}"  Input date  name="Tender[enquiryPeriod][endDate]"  ${tender_data.data.enquiryPeriod.endDate}
@@ -1714,10 +1692,11 @@ Make Global Qualifications List
 #  Дочекатися І Клікнути  xpath=//*[@name="Qualifications[${qualification_num}][action]"]
 #  Select From list By Index  xpath=//*[@name="Qualifications[${qualification_num * -1}][action]"]  0
   Select From list By Index  xpath=//select[@class="choose_prequalification"]  0
+  Sleep  3
 #  Click Element  xpath=//*[@name="Qualifications[${qualification_num * -1}][qualified]"]/ancestor::div[contains(@class,"field-wrapper ")]
-  Click Element  xpath=//input[contains(@id, "qualified")]
+  Click Element  xpath=//input[contains(@id, "qualified")]/..
 #  Click Element  xpath=//*[@name="Qualifications[${qualification_num * -1}][eligible]"]/ancestor::div[contains(@class,"field-wrapper ")]
-  Click Element  xpath=//input[contains(@id, "eligible")]
+  Click Element  xpath=//input[contains(@id, "eligible")]/..
   Click Element  xpath=(//*[@class="mk-btn mk-btn_accept btn-submitform_qualification"])[1]
 #  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="cancel_prequalification"]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
@@ -1894,10 +1873,10 @@ tenderonline.Зареєструвати угоду
   Дочекатися І Клікнути  xpath=//button[contains(@class, "mk-btn mk-btn_accept offersFinishBtn") and contains(text(), "Активувати рамкову угоду")]
   Wait Element Animation  xpath=//button[@data-test-id="SignDataButton"]
   Накласти ЄЦП  ${False}
-#  Sleep  1000
-#  Wait Until Element Is Visible  xpath=//*[contains(@href,"/agreements/view/")]  20
-#  ${agreement_uaid}=  Get Text  xpath=//*[contains(@href,"/agreements/view/")]
-#  [Return]  ${agreement_uaid}
+  Sleep  500
+  Wait Until Element Is Visible  xpath=//*[@data-test-id="agreement.agreementID"]  20
+  ${agreement_uaid}=  Get Text  xpath=//*[@data-test-id="agreement.agreementID"]
+  [Return]  ${agreement_uaid}
 
 
 tenderonline.Пошук угоди по ідентифікатору
