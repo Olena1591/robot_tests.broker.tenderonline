@@ -1694,9 +1694,9 @@ Make Global Qualifications List
   Select From list By Index  xpath=//select[@class="choose_prequalification"]  0
   Sleep  3
 #  Click Element  xpath=//*[@name="Qualifications[${qualification_num * -1}][qualified]"]/ancestor::div[contains(@class,"field-wrapper ")]
-  Click Element  xpath=//input[contains(@id, "qualified")]/..
+  Click Element  xpath=//*[text()="${company_name}"]/../following-sibling::div/descendant::input[contains(@id, "qualified")]/..
 #  Click Element  xpath=//*[@name="Qualifications[${qualification_num * -1}][eligible]"]/ancestor::div[contains(@class,"field-wrapper ")]
-  Click Element  xpath=//input[contains(@id, "eligible")]/..
+  Click Element  xpath=//*[text()="${company_name}"]/../following-sibling::div/descendant::input[contains(@id, "eligible")]/..
   Click Element  xpath=(//*[@class="mk-btn mk-btn_accept btn-submitform_qualification"])[1]
 #  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="cancel_prequalification"]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
