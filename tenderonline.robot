@@ -1695,6 +1695,7 @@ Make Global Qualifications List
   ${qualification_num}=  Convert To Integer  ${qualification_num}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If  "${TEST NAME}" == "Можливість підтвердити першу пропозицію кваліфікації"  Make Global Qualifications List
+  ...  ELSE IF  "${TEST NAME}" == "Можливість підтвердити першу пропозицію кваліфікації на другому етапі"  Make Global Qualifications List
   ${company_name}=  Set Variable  ${qualifications_lst[${qualification_num}]}
 
   Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/euprequalification/")]
@@ -1914,15 +1915,36 @@ tenderonline.Пошук угоди по ідентифікатору
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//textarea[@id="change-rationale"]
   Input Text  xpath=//textarea[@id="change-rationale"]  ${change_data.data.rationale}
   Click Button  xpath=//button[@id="submit-agreement"]
-  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+  Wait Until Keyword Succeeds  30 x  4 s  Page Should Contain Element  xpath=//a[contains(@href, "/buyer/agreements/update/")]
 
 Оновити властивості угоди
   [Arguments]  ${username}  ${agreement_uaid}  ${data}
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
-  Select From List By Value  xpath=//select[contains(@name, "Change[modifications]")]  ${data.modifications}
-  Input Text  xpath=//input[contains(@name, "[addend]")]  ${data.modifications[0].addend}
+  ${is_addend}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${data.data.modifications[0]}  addend
+  Run Keyword If  ${is_addend}  Run Keywords
+  ...  Select From List By Value  xpath=//select[contains(@name, "Change[modifications]")]  addend
+  ...  AND    Input Text  xpath=//input[contains(@name, "[addend]")]  ${data.data.modifications[0].addend}
+  ...  ELSE  Run Keywords
+  ...  Select From List By Value  xpath=//select[contains(@name, "Change[modifications]")]  factor
+  ...  AND    Input Text  xpath=//input[contains(@name, "[factor]")]  ${data.data.modifications[0].factor}
+#  Input Text  xpath=//input[contains(@name, "[addend]")]  ${data.data.modifications[0].addend}
   Click Button  xpath=//button[@id="submit-agreement"]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+
+
+#  Заповнити поля для допорогової закупівлі
+#  [Arguments]  ${tender_data}
+#  Log  ${tender_data}
+#  ${is_funders}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${tender_data.data}  funders
+#  ${minimalStep}=   add_second_sign_after_point   ${tender_data.data.minimalStep.amount}
+##  Wait And Select From List By Value  name=tender_method  open_${tender_data.data.procurementMethodType}
+##  Select From List By Value  id=tender-type-select  1
+#  Input date  name="Tender[enquiryPeriod][endDate]"  ${tender_data.data.enquiryPeriod.endDate}
+#  Run Keyword If  ${number_of_lots} == 0  ConvToStr And Input Text  name=Tender[minimalStep][amount]  ${minimalStep}
+#  Run Keyword If  ${is_funders}  Run Keywords
+#  ...  Дочекатися І Клікнути  id=funders-checkbox
+#  ...  AND  Wait And Select From List By Label  id=tender-funders  ${tender_data.data.funders[0].name}
+##  Input Date  name=Tender[tenderPeriod][endDate]  ${tender_data.data.tenderPeriod.endDate}
 
 Завантажити документ для зміни у рамковій угоді
   [Arguments]  ${username}  ${filepath}  ${agreement_uaid}  ${item_id}
