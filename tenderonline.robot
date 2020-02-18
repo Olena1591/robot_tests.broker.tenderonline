@@ -1267,10 +1267,14 @@ Get info from funders
 Get Info From Agreements
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
   ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
-  Run Keyword If  'agreements.status' in '${field_name}'  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
+#  Run Keyword If  'agreements.status' in '${field_name}'  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   ${status}=  Run Keyword And Return Status  Page Should Contain Element  xpath=//div[@class="col-xs-12 col-sm-6 col-md-8 item-bl_val"][contains(text(),"Укладена рамкова угода")]
-  ${value}=  Get Text  xpath=//*[@data-test-id="${field_name}"]
-  ${value}=  Set Variable If  ${status}  active  ${value}
+  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
+  ${value}=  Run Keyword If  'agreementID' in '${field_name}'
+  ...  Get Text  xpath=//a[@data-test-id="agreement.agreementID"]
+  ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
+   ${value}=  Set Variable If  ${status}  active  ${value}
+
   [Return]  ${value}
 
 
@@ -1584,7 +1588,6 @@ Add annual costs reduction
   Run Keyword If  ${doc_type_status}  Wait And Select From List By Value  xpath=(//select[contains(@name,"[documentType]")])[last()]  ${doc_type.replace("_d", "D").replace("financialDocuments","commercialProposal")}
   ${related_status}=  Run Keyword And Return Status  Element Should Be Visible  xpath=(//select[contains(@name,"[relatedItem]")])[last()]
   Run Keyword If  ${related_status}  Wait And Select From List By Value  xpath=(//select[contains(@name,"[relatedItem]")])[last()]  tender
-  capture page screenshot
   Подати Пропозицію Без Накладення ЕЦП
   Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(@class, 'alert-success')]
   Дочекатися завантаження документу
@@ -1605,6 +1608,17 @@ Add annual costs reduction
   Input Text  xpath=(//textarea[contains(@name,"confidentialityRationale")])[last()]  ${doc_data.data.confidentialityRationale}
   Подати Пропозицію Без Накладення ЕЦП
   Wait Until Element Is Visible  xpath=//div[contains(@class, 'alert-success')]
+
+Завантажити документ в рамкову угоду
+  [Arguments]  ${username}  ${filepath}  ${agreement_uaid}
+  tenderonline.Пошук угоди по ідентифікатору  ${username}  ${agreement_uaid}
+  Choose File  xpath=//input[@name="FileUpload[file][]"]  ${filepath}
+  Select From List By Value  xpath=(//div[@class="document"]/descendant::select[@class="document-type"])[2]  notice
+  Click Button  xpath=//button[@id="submit-agreement-docs"]
+  Дочекатися завантаження документу
+
+
+
 
 ###############################################################################################################
 ###########################################    КВАЛІФІКАЦІЯ    ################################################
@@ -1697,7 +1711,7 @@ Make Global Qualifications List
   Click Element  xpath=//*[text()="${company_name}"]/../following-sibling::div/descendant::input[contains(@id, "qualified")]/..
 #  Click Element  xpath=//*[@name="Qualifications[${qualification_num * -1}][eligible]"]/ancestor::div[contains(@class,"field-wrapper ")]
   Click Element  xpath=//*[text()="${company_name}"]/../following-sibling::div/descendant::input[contains(@id, "eligible")]/..
-  Click Element  xpath=(//*[@class="mk-btn mk-btn_accept btn-submitform_qualification"])[1]
+  Click Element  xpath=//*[text()="${company_name}"]/../following-sibling::div/descendant::button[@class="mk-btn mk-btn_accept btn-submitform_qualification"]
 #  Wait Until Keyword Succeeds  5x  1s   Page Should Contain Element  xpath=//*[@name="cancel_prequalification"]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
 
@@ -1874,19 +1888,57 @@ tenderonline.Зареєструвати угоду
   Wait Element Animation  xpath=//button[@data-test-id="SignDataButton"]
   Накласти ЄЦП  ${False}
   Sleep  500
-  Wait Until Element Is Visible  xpath=//*[@data-test-id="agreement.agreementID"]  20
-  ${agreement_uaid}=  Get Text  xpath=//*[@data-test-id="agreement.agreementID"]
-  [Return]  ${agreement_uaid}
+#  Wait Until Element Is Visible  xpath=//*[@data-test-id="agreement.agreementID"]  20
+#  ${agreement_uaid}=  Get Text  xpath=//*[@data-test-id="agreement.agreementID"]
+#  [Return]  ${agreement_uaid}
 
 
 tenderonline.Пошук угоди по ідентифікатору
   [Arguments]  ${username}  ${agreement_uaid}  ${save_key}=agreement_data
-  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  tenderonline.Пошук тендера по ідентифікатору   ${username}  ${agreement_uaid[0:-3]}
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   Wait Until Element Is Visible  xpath=//*[contains(@href,"/agreements/view/")]  10
   Click Element  xpath=//*[contains(@href,"/agreements/view/")]
 
+Отримати доступ до угоди
+  [Arguments]  ${username}  ${agreement_uaid}
+  tenderonline.Пошук угоди по ідентифікатору  ${username}  ${agreement_uaid}
+#  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[@class="col-xs-12 text-center"]/descendant::button[contains(text(),"Оголосити відбір для закупівлі за рамковою угодою")]
 
+Внести зміну в угоду
+  [Arguments]  ${username}  ${agreement_uaid}  ${change_data}
+  tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
+  Click Button  xpath=//button[@id="agreement-create-change-modal"]
+  Select From List By Value  xpath=//select[@name="type"]  ${change_data.data.rationaleType}
+  Click Button  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//textarea[@id="change-rationale"]
+  Input Text  xpath=//textarea[@id="change-rationale"]  ${change_data.data.rationale}
+  Click Button  xpath=//button[@id="submit-agreement"]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+
+Оновити властивості угоди
+  [Arguments]  ${username}  ${agreement_uaid}  ${data}
+  tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
+  Select From List By Value  xpath=//select[contains(@name, "Change[modifications]")]  ${data.modifications}
+  Input Text  xpath=//input[contains(@name, "[addend]")]  ${data.modifications[0].addend}
+  Click Button  xpath=//button[@id="submit-agreement"]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+
+Завантажити документ для зміни у рамковій угоді
+  [Arguments]  ${username}  ${filepath}  ${agreement_uaid}  ${item_id}
+  tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
+  Click Button  xpath=//a[contains(@class, "mk-btn mk-btn_default") and contains(text(),"Редагувати зміни")]
+  Choose File  xpath=//input[@name="FileUpload[file][]"]  ${filepath}
+  Select From List By Value  xpath=(//div[@class="document"]/descendant::select[@class="document-type"])[2]  notice
+  Click Button  xpath=//button[@id="submit-agreement"]
+  Дочекатися завантаження документу
+
+Застосувати зміну для угоди
+  [Arguments]  ${username}  ${agreement_uaid}  ${dateSigned}  ${status}
+  tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
+  Click Button  xpzth=//button[@class="mk-btn mk-btn_accept js-btn-agreement-action"]
+  Wait Element Animation  xpath=//button[@class="btn mk-btn mk-btn_accept"]
+  Click Button  xpath=//button[@class="btn mk-btn mk-btn_accept"]
 
 
 ###############################################################################################################
