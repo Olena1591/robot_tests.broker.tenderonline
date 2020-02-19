@@ -709,6 +709,14 @@ Go To And Assert
   ${current_url}=  Get Location
   Should Be Equal  ${url}  ${current_url}
 
+Force agreement synchronization
+  [Arguments]  ${url}
+  Go To  ${url}
+#  ${synchro_url}=  ${url.replace("view", "json")}
+  Go To  ${url.replace("view", "json")}
+  Go To  ${url}
+
+
 Пошук тендера по ідентифікатору
   [Arguments]  ${username}  ${tender_uaid}  ${save_key}=tender_data
   Switch browser  ${username}
@@ -1264,19 +1272,17 @@ Get info from funders
   ${value}=  Get Text  xpath=//*[@data-test-id="${field_name.replace('[0]', '')}"]
   [Return]  ${value}
 
+
 Get Info From Agreements
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
   ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
-#  Run Keyword If  'agreements.status' in '${field_name}'  Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   ${status}=  Run Keyword And Return Status  Page Should Contain Element  xpath=//div[@class="col-xs-12 col-sm-6 col-md-8 item-bl_val"][contains(text(),"Укладена рамкова угода")]
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   ${value}=  Run Keyword If  'agreementID' in '${field_name}'
   ...  Get Text  xpath=//a[@data-test-id="agreement.agreementID"]
   ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
    ${value}=  Set Variable If  ${status}  active  ${value}
-
   [Return]  ${value}
-
 
 
 Отримати інформацію із предмету
@@ -1459,6 +1465,18 @@ Get Info From Complaints
   Click Element  xpath=//*[@id="slidePanel"]/descendant::*[contains(@href,"tender/view")]
   [Return]  ${value}
 
+Отримати інформацію із угоди
+  [Arguments]  ${username}  ${agreement_uaid}  ${field_name}
+  tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
+  ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
+  ${index}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[1].split(']')[0]}
+  ${value}=    Run Keyword If  'rationale'  in '${field_name}'
+  ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
+  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]
+  ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
+  [Return]  ${value}
+
+
 ###############################################################################################################
 #######################################    ПОДАННЯ ПРОПОЗИЦІЙ    ##############################################
 ###############################################################################################################
@@ -1613,6 +1631,7 @@ Add annual costs reduction
   [Arguments]  ${username}  ${filepath}  ${agreement_uaid}
   tenderonline.Пошук угоди по ідентифікатору  ${username}  ${agreement_uaid}
   Choose File  xpath=//input[@name="FileUpload[file][]"]  ${filepath}
+  Wait Until Keyword Succeeds  5 x  1 s  Element Should Be Visible  xpath=(//div[@class="document"]/descendant::select[@class="document-type"])[2]
   Select From List By Value  xpath=(//div[@class="document"]/descendant::select[@class="document-type"])[2]  notice
   Click Button  xpath=//button[@id="submit-agreement-docs"]
   Дочекатися завантаження документу
@@ -1909,58 +1928,66 @@ tenderonline.Пошук угоди по ідентифікатору
 Внести зміну в угоду
   [Arguments]  ${username}  ${agreement_uaid}  ${change_data}
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
+  ${url}=  Get Location
+  Wait Until Keyword Succeeds  30 x  5 s  Run Keywords
+  ...  Force Agreement Synchronization  ${url}
+  ...  AND  Wait Until Page Contains Element  xpath=//button[@id="agreement-create-change-modal"]
   Click Button  xpath=//button[@id="agreement-create-change-modal"]
+  Wait Element Animation  xpath=//select[@name="type"]
   Select From List By Value  xpath=//select[@name="type"]  ${change_data.data.rationaleType}
   Click Button  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
-  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//textarea[@id="change-rationale"]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//textarea[@id="change-rationale"]
   Input Text  xpath=//textarea[@id="change-rationale"]  ${change_data.data.rationale}
+  Run Keyword If  'partyWithdrawal' in '${change_data.data.rationaleType}'  Click Element  xpath=(//label[contains(@for, "modification")])[1]
+#  Wait Until Keyword Succeeds  10 x  2 s  Page Should Contain  ${change_data.data.rationale}
   Click Button  xpath=//button[@id="submit-agreement"]
-  Wait Until Keyword Succeeds  30 x  4 s  Page Should Contain Element  xpath=//a[contains(@href, "/buyer/agreements/update/")]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
+  Wait Until Keyword Succeeds  30 x  5 s  Run Keywords
+  ...  Force Agreement Synchronization  ${url}
+  ...  AND  Wait Until Page Contains Element  xpath=//a[contains(@href, "/buyer/agreements/update/")]
 
 Оновити властивості угоди
   [Arguments]  ${username}  ${agreement_uaid}  ${data}
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
   ${is_addend}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${data.data.modifications[0]}  addend
+  ${is_factor}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${data.data.modifications[0]}  factor
+  ${value_addend}=  Set Variable If  ${is_addend}  ${data.data.modifications[0].addend}
+  ${value_factor}=  Set Variable If  ${is_factor}  ${data.data.modifications[0].factor}
+  Дочекатися І Клікнути  xpath=//a[contains(@href, "/buyer/agreements/update/")]
   Run Keyword If  ${is_addend}  Run Keywords
   ...  Select From List By Value  xpath=//select[contains(@name, "Change[modifications]")]  addend
-  ...  AND    Input Text  xpath=//input[contains(@name, "[addend]")]  ${data.data.modifications[0].addend}
+  ...  AND  ConvToStr And Input Text  xpath=//input[contains(@name, "[addend]")]  ${value_addend}
   ...  ELSE  Run Keywords
   ...  Select From List By Value  xpath=//select[contains(@name, "Change[modifications]")]  factor
-  ...  AND    Input Text  xpath=//input[contains(@name, "[factor]")]  ${data.data.modifications[0].factor}
+  ...  AND  ConvToStr And Input Text  xpath=//input[contains(@name, "[factor]")]  ${value_factor}
 #  Input Text  xpath=//input[contains(@name, "[addend]")]  ${data.data.modifications[0].addend}
   Click Button  xpath=//button[@id="submit-agreement"]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
 
-
-#  Заповнити поля для допорогової закупівлі
-#  [Arguments]  ${tender_data}
-#  Log  ${tender_data}
-#  ${is_funders}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${tender_data.data}  funders
-#  ${minimalStep}=   add_second_sign_after_point   ${tender_data.data.minimalStep.amount}
-##  Wait And Select From List By Value  name=tender_method  open_${tender_data.data.procurementMethodType}
-##  Select From List By Value  id=tender-type-select  1
-#  Input date  name="Tender[enquiryPeriod][endDate]"  ${tender_data.data.enquiryPeriod.endDate}
-#  Run Keyword If  ${number_of_lots} == 0  ConvToStr And Input Text  name=Tender[minimalStep][amount]  ${minimalStep}
-#  Run Keyword If  ${is_funders}  Run Keywords
-#  ...  Дочекатися І Клікнути  id=funders-checkbox
-#  ...  AND  Wait And Select From List By Label  id=tender-funders  ${tender_data.data.funders[0].name}
-##  Input Date  name=Tender[tenderPeriod][endDate]  ${tender_data.data.tenderPeriod.endDate}
-
 Завантажити документ для зміни у рамковій угоді
   [Arguments]  ${username}  ${filepath}  ${agreement_uaid}  ${item_id}
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
-  Click Button  xpath=//a[contains(@class, "mk-btn mk-btn_default") and contains(text(),"Редагувати зміни")]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//a[contains(@class, "mk-btn mk-btn_default") and contains(text(),"Редагувати зміни")]
+  Click Element  xpath=//a[contains(@class, "mk-btn mk-btn_default") and contains(text(),"Редагувати зміни")]
   Choose File  xpath=//input[@name="FileUpload[file][]"]  ${filepath}
-  Select From List By Value  xpath=(//div[@class="document"]/descendant::select[@class="document-type"])[2]  notice
+  Select From List By Value  xpath=(//div[@class="document"]/descendant::select[@class="document-type"])[last()]  notice
   Click Button  xpath=//button[@id="submit-agreement"]
   Дочекатися завантаження документу
 
 Застосувати зміну для угоди
   [Arguments]  ${username}  ${agreement_uaid}  ${dateSigned}  ${status}
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
-  Click Button  xpzth=//button[@class="mk-btn mk-btn_accept js-btn-agreement-action"]
+  ${url}=  Get Location
+  Run Keyword If  '${status}' == 'active'  Run Keywords
+  ...  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//button[@class="mk-btn mk-btn_accept js-btn-agreement-action"]
+  ...  AND  Click Button  xpath=//button[@class="mk-btn mk-btn_accept js-btn-agreement-action"]
+  ...  ELSE  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_danger js-btn-agreement-action"]
   Wait Element Animation  xpath=//button[@class="btn mk-btn mk-btn_accept"]
   Click Button  xpath=//button[@class="btn mk-btn mk-btn_accept"]
+  Wait Until Keyword Succeeds  30 x  5 s  Run Keywords
+  ...  Force Agreement Synchronization  ${url}
+  ...  AND  Wait Until Page Contains Element  xpath=//a[contains(@href, "/buyer/agreements/update/")]
+
 
 
 ###############################################################################################################
