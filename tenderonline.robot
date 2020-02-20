@@ -784,6 +784,16 @@ tenderonline.Активувати другий етап
 ##  Дочекатися І Клікнути  xpath=//a[contains(@href,"tender/update")]
 #  Click Element  xpath=//*[@name="stage2_active_tendering"]
 
+Створити тендер другого етапу
+    [Arguments]  ${username}  ${tender_data}
+    ${internal_agreement_id}=  ${tender_data.data.agreements[0].id}
+
+
+
+Make Global Qualifications List
+  ${internal_id}=  Get Text  xpath=//div[@data-test-id="id"]
+  ${qualifications_lst}=  retrieve_qaulifications_range  ${internal_id}
+  Set Global Variable  ${qualifications_lst}  ${qualifications_lst}
 
 
 
@@ -1473,6 +1483,7 @@ Get Info From Complaints
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
   ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
   ${index}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[1].split(']')[0]}
+  ${index}=  Convert To Number  ${index}
   ${value}=    Run Keyword If  'rationale' in '${field_name}'
   ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
 #  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]

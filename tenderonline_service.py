@@ -248,3 +248,9 @@ def retrieve_qaulifications_range(internal_id):
     for index in range(len(data['data']['qualifications'])):
         lst.append(get_company_name_by_bid_id(data['data']['qualifications'][index]['bidID'], data))
     return lst
+
+
+# def retrive_agreement_id(internal_agreement_id):
+#     resp_data = requests.get("https://lb-api-staging.prozorro.gov.ua/api/2.4/agreements/{}".format(internal_agreement_id))
+
+
