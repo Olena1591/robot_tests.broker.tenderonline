@@ -1951,8 +1951,6 @@ tenderonline.Пошук угоди по ідентифікатору
 
 Оновити властивості угоди
   [Arguments]  ${username}  ${agreement_uaid}  ${data}
-  tenderonline.пошук тендера по ідентифікатору  ${username}  ${agreement_uaid[0:-3]}
-  ${company_name}=  Set Variable  ${qualifications_lst[${qualification_num}]}
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
   ${is_addend}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${data.data.modifications[0]}  addend
   ${is_factor}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${data.data.modifications[0]}  factor
@@ -1960,7 +1958,7 @@ tenderonline.Пошук угоди по ідентифікатору
 #  ${value_factor}=  Set Variable If  ${is_factor}  ${data.data.modifications[0].factor}
   ${field_value}=  Run Keyword If  ${data.data.modifications[0].has_key("addend")}  add_second_sign_after_point  ${data.data.modifications[0].addend}
   ...  ELSE IF  ${data.data.modifications[0].has_key("factor")}  Evaluate  str((${data.data.modifications[0].factor} - 1) * 100)
-  ${contract_id}=  Get Element Attribute  xpath=//label[contains(text(), "${company_name}")]/ancestor::div[@class="row"]/descendant::input[contains(@name, "Change[modifications]") and contains(@class, "change-factor")]@value
+#  ${contract_id}=  ${data.data.modifications[0].contractId}
   Дочекатися І Клікнути  xpath=//a[contains(@href, "/buyer/agreements/update/")]
   Run Keyword If  ${is_addend}  Run Keywords
   ...  Select From List By Value  xpath=//select[contains(@name, "Change[modifications]")]  addend
@@ -1968,7 +1966,7 @@ tenderonline.Пошук угоди по ідентифікатору
   ...  ELSE IF  ${is_factor}  Run Keywords
   ...  Select From List By Value  xpath=//select[contains(@name, "Change[modifications]")]  factor
   ...  AND  ConvToStr And Input Text  xpath=//input[contains(@name, "[factor]")]  ${field_value}
-  ...  ELSE  Select Checkbox  xpath=//label[contains(text(), "${company_name}")]/ancestor::div[@class="row"]/descendant::input[contains(@name, "Change[modifications]") and contains(@class, "change-factor")]
+  ...  ELSE  Select Checkbox  xpath=//input[contains(@name, "Change[modifications]") and contains(@value, "${data.data.modifications[0].contractId}")]
 #  Input Text  xpath=//input[contains(@name, "[addend]")]  ${data.data.modifications[0].addend}
   Click Button  xpath=//button[@id="submit-agreement"]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
