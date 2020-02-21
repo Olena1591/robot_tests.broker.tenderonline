@@ -78,7 +78,7 @@ Login
   Click Element  xpath=//a[@href="${host}/tenders"]
   Дочекатися І Клікнути  xpath=//a[@href="${host}/plan"]
   Дочекатися І Клікнути  xpath=//a[@href="${host}/buyer/plan/create"]
-    Run Keyword If  "below" in "${tender_data.data.tender.procurementMethodType}"  Conv And Select From List By Value  name=procurementMethod  open_belowThreshold
+  Run Keyword If  "below" in "${tender_data.data.tender.procurementMethodType}"  Conv And Select From List By Value  name=procurementMethod  open_belowThreshold
   ...  ELSE IF  "${tender_data.data.tender.procurementMethodType}" == "reporting"  Wait And Select From List By Value  name=procurementMethod   limited_reporting
   ...  ELSE IF  "${tender_data.data.tender.procurementMethodType}" == "aboveThresholdUA"  Wait And Select From List By Value  name=procurementMethod   open_aboveThresholdUA
   ...  ELSE IF  "${tender_data.data.tender.procurementMethodType}" == "negotiation"  Wait And Select From List By Value  name=procurementMethod  limited_negotiation
@@ -785,17 +785,22 @@ tenderonline.Активувати другий етап
 #  Click Element  xpath=//*[@name="stage2_active_tendering"]
 
 Створити тендер другого етапу
-    [Arguments]  ${username}  ${tender_data}
-    ${internal_agreement_id}=  ${tender_data.data.agreements[0].id}
-
-
-
-Make Global Qualifications List
-  ${internal_id}=  Get Text  xpath=//div[@data-test-id="id"]
-  ${qualifications_lst}=  retrieve_qaulifications_range  ${internal_id}
-  Set Global Variable  ${qualifications_lst}  ${qualifications_lst}
-
-
+  [Arguments]  ${username}  ${tender_data}
+#    ${internal_agreement_id}=  ${tender_data.data.agreements[0].id}
+  ${agreementID}=   retrive_agreement_id  ${tender_data.data.agreements[0].id}
+  tenderonline.Отримати доступ до угоди  ${username}  ${agreementID}
+  Дочекатися І Клікнути  xpath=//button[contains(text(),"Оголосити відбір для закупівлі")]
+  Wait Element Animation  xpath=//div[@class="modal-content"]/descendant::button[contains(text(),"Оголосити відбір для закупівлі за рамковою угодою")]
+  Дочекатися І Клікнути  xpath=//div[@class="modal-content"]/descendant::button[contains(text(),"Оголосити відбір для закупівлі за рамковою угодою")]
+  Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
+  Click button  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
+  Wait Until Keyword Succeeds  5 x  1s  Run Keywords
+  ...  Element Should Be Visible  xpath=//*[contains(@href,"tender/json/")]
+  ...  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
+  ...  AND  Wait Until Element Is Visible  xpath=//*[@data-test-id="tenderID"]  10
+  ${tender_uaid}=  Get Text  xpath=//*[@data-test-id="tenderID"]
+  [Return]  ${tender_uaid}
 
 
 Внести зміни в тендер
@@ -1481,9 +1486,9 @@ Get Info From Complaints
 Отримати інформацію із угоди
   [Arguments]  ${username}  ${agreement_uaid}  ${field_name}
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
-  ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
   ${index}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[1].split(']')[0]}
-  ${index}=  Convert To Number  ${index}
+  Run Keyword If  '[' in '${field_name}'  Convert To Number  ${index}
+  ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
   ${value}=    Run Keyword If  'rationale' in '${field_name}'
   ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
 #  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]
