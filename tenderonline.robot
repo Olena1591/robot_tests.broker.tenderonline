@@ -820,9 +820,10 @@ tenderonline.Активувати другий етап
   ...  ELSE  Set Variable  ${field_value}
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
-  Input Text  xpath=(//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lots_marker"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")])[1]  ${field_value}
+#  Input Text  xpath=(//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lots_marker"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")])[1]  ${field_value}
+  Input Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="lot"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")] ${field_value}
   Дочекатися І Клікнути  xpath=//button[contains(@class,'btn_submit_form')]
-  Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
 
 Завантажити документ в лот
   [Arguments]  ${username}  ${filepath}  ${tender_uaid}  ${lot_id}
@@ -1493,7 +1494,7 @@ Get Info From Complaints
 #  ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
   ${field_name}=  Remove String Using Regexp  ${field_name}  \\[(\\d+)\\]
   ${value}=    Run Keyword If  'rationale' in '${field_name}'
-  ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])["${index + 1}"]
+  ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
 #  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]
   ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
   [Return]  ${value}
