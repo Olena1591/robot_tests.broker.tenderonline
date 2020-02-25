@@ -1498,6 +1498,8 @@ Get Info From Complaints
   ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
 #  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]
   ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
+  ${value}=  Run Keyword If  "addend" in "${field_name}"  Convert To Number  ${value}
+  ...  ELSE  Set Variable  ${value}
   [Return]  ${value}
 
 
