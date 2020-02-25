@@ -191,10 +191,10 @@ def adapt_view_lot_data(value, field_name):
         value = float(value.replace(' ', ''))
     elif 'minimalStep.currency' in field_name:
         value = value.split(' ')[-1]
-    elif 'currency' in field_name:
-        value = value.split(' ')[-4]
-    elif 'valueAddedTaxIncluded' in field_name:
-        value = ' '.join(value.split(' ')[-3:]).strip()
+    # elif 'currency' in field_name:
+    #     value = value.split(' ')[-4]
+    # elif 'valueAddedTaxIncluded' in field_name:
+    #     value = ' '.join(value.split(' ')[-3:]).strip()
     elif 'minimalStep.amount' in field_name:
         value = float(value.replace(' ', ''))
     elif 'Date' in field_name:
