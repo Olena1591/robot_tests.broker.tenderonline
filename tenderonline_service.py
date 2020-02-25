@@ -121,6 +121,7 @@ def convert_string_from_dict_tenderonline(string):
         u'відкликано скаржником': u'stopping',
         u'Без ответа': u'ignored',
         u'Укладена Рамкова угода': u'complete',
+        u'Період запрошення': u'active.enquiries',
     }.get(string, string)
 
 
@@ -187,7 +188,7 @@ def adapt_view_tender_data(value, field_name):
 
 def adapt_view_lot_data(value, field_name):
     if 'value.amount' in field_name:
-        value = float("".join(value.split(' ')[:-4]))
+        value = float(value.replace(' ', ''))
     elif 'minimalStep.currency' in field_name:
         value = value.split(' ')[-1]
     elif 'currency' in field_name:
@@ -195,7 +196,7 @@ def adapt_view_lot_data(value, field_name):
     elif 'valueAddedTaxIncluded' in field_name:
         value = ' '.join(value.split(' ')[-3:]).strip()
     elif 'minimalStep.amount' in field_name:
-        value = float("".join(value.split(' ')[:-1]))
+        value = float(value.replace(' ', ''))
     elif 'Date' in field_name:
         value = convert_time(value)
     return convert_string_from_dict_tenderonline(value)
@@ -250,7 +251,7 @@ def retrieve_qaulifications_range(internal_id):
     return lst
 
 
-# def retrive_agreement_id(internal_agreement_id):
-#     resp_data = requests.get("https://lb-api-staging.prozorro.gov.ua/api/2.4/agreements/{}".format(internal_agreement_id))
-
+def retrive_agreement_id(internal_agreement_id):
+    resp_data = requests.get("https://lb-api-staging.prozorro.gov.ua/api/2.4/agreements/{}".format(internal_agreement_id))
+    return json.loads(resp_data.content)['data']['agreementID']
 

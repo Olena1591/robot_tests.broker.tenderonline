@@ -1490,7 +1490,7 @@ Get Info From Complaints
   [Arguments]  ${username}  ${agreement_uaid}  ${field_name}
   tenderonline.Отримати доступ до угоди  ${username}  ${agreement_uaid}
   ${index}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[1].split(']')[0]}
-  Run Keyword If  '[' in '${field_name}'  Convert To Integer  ${index}
+  ${index}=  Run Keyword If  '[' in '${field_name}'  Convert To Integer  ${index}
 #  ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
   ${field_name}=  Remove String Using Regexp  ${field_name}  \\[(\\d+)\\]
   ${value}=    Run Keyword If  'rationale' in '${field_name}'
