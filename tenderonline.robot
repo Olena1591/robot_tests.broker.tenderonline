@@ -774,10 +774,10 @@ tenderonline.Отримати тендер другого етапу та збе
 
 
 tenderonline.Активувати другий етап
-    [Arguments]  ${username}  ${tender_uaid}
+   [Arguments]  ${username}  ${tender_uaid}
   tenderonline.Отримати тендер другого етапу та зберегти його  ${username}  ${tender_uaid}
-    Click Element  xpath=//*[@name="stage2_active_tendering"]
-    Element Should Not Be Visible  xpath=//*[@class="alert-danger alert fade in active"]
+  Click Element  xpath=//*[@name="stage2_active_tendering"]
+  Element Should Not Be Visible  xpath=//*[@class="alert-danger alert fade in active"]
 #tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid[0:-2]}
 #  Click Element  xpath=//*[@class="mk-btn mk-btn_accept"]
 #  Wait Until Keyword Succeeds  5x  1s   Page Should Contain  Чернетка 2-гий етап
@@ -1318,14 +1318,15 @@ Get Info From Agreements
   ${value}=  adapt_view_item_data  ${value}  ${field_name}
   [Return]  ${value}
 
-Отримати інформацію із лоту
+Отримати інформацію із лотуneed string or buffer, int found
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}  ${field_name}
   ${red}=  Evaluate  "\\033[1;31m"
-  ${value}=  Run Keyword If  'minimalStep' in '${field_name}' and 'TaxIncluded' not in '${field_name}'  Get Text  xpath=//*[@data-test-id="lots.minimalStep.amount"]
-#  ...  ELSE IF  'value.amount' in '${field_name}'  Get Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="item-inf_txt"]/descendant::*[@data-test-id='lots.value.amount']
-  ...  ELSE IF 'valueAddedTaxIncluded' in '${field_name}'  Get Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="item-inf_txt"]/descendant::*[@data-test-id="value.valueAddedTaxIncluded"]
+#  ${value}=  Run Keyword If  'minimalStep' in '${field_name}' and 'TaxIncluded' not in '${field_name}'  Get Text  xpath=//*[@data-test-id="lots.minimalStep.amount"]
+##  ...  ELSE IF  'value.amount' in '${field_name}'  Get Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="item-inf_txt"]/descendant::*[@data-test-id='lots.value.amount']
+  ${value}=  Run Keyword If  'value.valueAddedTaxIncluded' in '${field_name}'  Get Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="item-inf_txt"]/descendant::*[@data-test-id="value.valueAddedTaxIncluded"]
   ...  ELSE IF  'lots[0].auctionPeriod.startDate' in '${field_name}'  Get Text  xpath=//*[@data-test-id="${field_name.replace('[0]', '')}"]
-  ...  ELSE  Get Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="item-inf_txt"]/descendant::*[@data-test-id='lots.${field_name}']
+  ...  ELSE IF  'minimalStep.valueAddedTaxIncluded' in '${field_name}'  Get Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="item-inf_txt"]/descendant::*[@data-test-id="value.valueAddedTaxIncluded"]
+  ...  ELSE  Get Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="item-inf_txt"]/descendant::*[@data-test-id="lots.${field_name}"]
   ${value}=  adapt_view_lot_data  ${value}  ${field_name}
   [Return]  ${value}
 
@@ -1690,6 +1691,7 @@ Add annual costs reduction
   Wait Until Element Is Visible  xpath=//select[@id="document-type-0"]
   Select From List By Value  xpath=//select[@id="document-type-0"]  awardNotice
   Run Keyword If  '${mode}' == 'belowThreshold'  Wait Until Keyword Succeeds  10 x  400 ms  Page Should Contain Element  xpath=(//input[@type="file"])[last()]
+  ...  ELSE IF  '${mode}' == 'framework_selection'  Wait Until Keyword Succeeds  3 x  400 ms  Page Should Contain Element  xpath=(//*[@name="send_prequalification"])[1]
   ...  ELSE IF  '${mode}' == 'open_esco' and ${award_num} == 2  Run Keywords
   ...  Select Checkbox  xpath=//input[@id="award-${award_num - 1}-qualified"]
   ...  AND  Select Checkbox  xpath=//input[@id="award-${award_num - 1}-eligible"]
@@ -1832,7 +1834,8 @@ Disqualification of the first winner
   Choose File  xpath=//*[@class="unsuccessful"]/descendant::input[@type="file"]  ${document}
   Wait Until Element Is Visible  xpath=//select[@id="document-type-0"]
   Select From List By Value  xpath=//select[@id="document-type-0"]  awardNotice
-  Select Checkbox  xpath=//input[@value="Не вiдповiдає квалiфiкацiйним критерiям."]
+  Run Keyword If  '${mode}' != 'framework_selection'  Select Checkbox  xpath=//input[@value="Не вiдповiдає квалiфiкацiйним критерiям."]
+  ...  ELSE  Дочекатися І Клікнути  xpath=//input[@value="Переможець відмовився від підписання договору"]/..
   Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_danger btn-submitform_award"]
   Дочекатися І Клікнути  xpath=//button[@class="btn mk-btn mk-btn_accept"]
   Wait Element Animation  xpath=//h4[@class="modal-title"]

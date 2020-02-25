@@ -122,6 +122,8 @@ def convert_string_from_dict_tenderonline(string):
         u'Без ответа': u'ignored',
         u'Укладена Рамкова угода': u'complete',
         u'Період запрошення': u'active.enquiries',
+        u'Підтверджена зміна': u'active',
+        u'Скасована зміна': u'cancelled',
     }.get(string, string)
 
 
