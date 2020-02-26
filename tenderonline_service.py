@@ -124,6 +124,10 @@ def convert_string_from_dict_tenderonline(string):
         u'Період запрошення': u'active.enquiries',
         u'Підтверджена зміна': u'active',
         u'Скасована зміна': u'cancelled',
+        u'Зміна ціни у зв’язку із зміною ставок податків і зборів': u'taxRate',
+        u'Зміна сторонніх показників (курсу, тарифів...)': u'thirdParty',
+        u'Припинення участі у рамковій угоді учасника': u'partyWithdrawal',
+        u'Зміна ціни за одиницю товару (у звʼязку з коливання ціни на ринку)': u'itemPriceVariation',
     }.get(string, string)
 
 

@@ -821,7 +821,7 @@ tenderonline.Активувати другий етап
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
 #  Input Text  xpath=(//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lots_marker"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")])[1]  ${field_value}
-  Input Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="lot"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")] ${field_value}
+  Input Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="lot"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")]  ${field_value}
   Дочекатися І Клікнути  xpath=//button[contains(@class,'btn_submit_form')]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
 
@@ -1318,7 +1318,7 @@ Get Info From Agreements
   ${value}=  adapt_view_item_data  ${value}  ${field_name}
   [Return]  ${value}
 
-Отримати інформацію із лотуneed string or buffer, int found
+Отримати інформацію із лоту
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}  ${field_name}
   ${red}=  Evaluate  "\\033[1;31m"
 #  ${value}=  Run Keyword If  'minimalStep' in '${field_name}' and 'TaxIncluded' not in '${field_name}'  Get Text  xpath=//*[@data-test-id="lots.minimalStep.amount"]
@@ -1495,10 +1495,11 @@ Get Info From Complaints
   ${index}=  Run Keyword If  '[' in '${field_name}'  Convert To Integer  ${index}
 #  ${field_name}=  Set Variable If  '[' in '${field_name}'  ${field_name.split('[')[0]}${field_name.split(']')[1]}  ${field_name}
   ${field_name}=  Remove String Using Regexp  ${field_name}  \\[(\\d+)\\]
-  ${value}=    Run Keyword If  'rationale' in '${field_name}'
-  ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
-#  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]
-  ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
+#  ${value}=    Run Keyword If  'rationale' in '${field_name}'
+#  ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
+##  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]
+#  ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
+  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
   ${value}=  Run Keyword If  "addend" in "${field_name}"  Convert To Number  ${value}
   ...  ELSE  Set Variable  ${value}
   [Return]  ${value}
@@ -1896,6 +1897,7 @@ Disqualification of the first winner
 #  Mouse Down  xpath=//*[contains(@name,"[dateSigned]")]
   Input Text  xpath=//input[contains(@name,"[contractNumber]")]  777
   Run Keyword If  '${mode}' == 'reporting'  Click Element  xpath=//*[@name="Contract[${contract_num}][dateSigned]"]
+  ...  ELSE IF  '${mode}' == 'framework_selection'  Click Element  xpath=//*[@name="Contract[${contract_num}][dateSigned]"]
 #  Input Text  name=ContractPeriod[${contract_num}][startDate]  15/02/2020 00:00:00
 #  Input Text  name=ContractPeriod[${contract_num}][endDate]  20/03/2020 00:00:00
   Execute Javascript   document.querySelector('[name="ContractPeriod[${contract_num}][startDate]"]').value="15/02/2020 00:00"
@@ -1954,6 +1956,8 @@ tenderonline.Пошук угоди по ідентифікатору
   Дочекатися І Клікнути  xpath=//div[@id="slidePanel"]/descendant::a[contains(@href,"tender/protokol")]
   Wait Until Element Is Visible  xpath=//*[contains(@href,"/agreements/view/")]  10
   Click Element  xpath=//*[contains(@href,"/agreements/view/")]
+  ${url}=  Get Location
+  Force Agreement Synchronization  ${url}
 
 Отримати доступ до угоди
   [Arguments]  ${username}  ${agreement_uaid}
