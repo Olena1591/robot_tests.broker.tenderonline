@@ -1501,8 +1501,9 @@ Get Info From Complaints
 #  ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
 ##  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]
 #  ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
-  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
+  ${value}=  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
   ${value}=  Run Keyword If  "addend" in "${field_name}"  Convert To Number  ${value}
+  ...  ELSE IF  "factor" in "${field_name}"  Convert To Number  ${value}
   ...  ELSE  Set Variable  ${value}
   [Return]  ${value}
 
@@ -1562,7 +1563,7 @@ Add competitive_dialogue bid
 Add framework_selection bid
   [Arguments]  ${bid}  ${number_of_lots}
   :FOR  ${lot_index}  IN RANGE  ${number_of_lots}
-  \  ConvToStr And Input Text  name=Bid[lotValues][${bid.data.lotValues[${lot_index}].relatedLot}][value][amount]  ${bid.data.lotValues[${lot_index}].value.amount}
+  \  ConvToStr And Input Text  name=Bid[lotValues][${bid.data.lotValues[${lot_index}]}][value][amount]  ${bid.data.lotValues[${lot_index}].value.amount}
 
 
 Add esco bid
@@ -2035,7 +2036,8 @@ tenderonline.Пошук угоди по ідентифікатору
   Wait Until Keyword Succeeds  30 x  5 s  Run Keywords
   ...  Force Agreement Synchronization  ${url}
   ...  AND  Wait Until Page Contains Element  xpath=//button[contains(@class, "sign_btn mk-btn mk-btn_default") and contains(text(),"Накласти ЕЦП/КЕП")]
-
+  Накласти ЄЦП  ${False}
+  Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//button[contains(text(),"Оголосити відбір для закупівлі")]
 
 
 ###############################################################################################################
