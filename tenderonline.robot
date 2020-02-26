@@ -821,7 +821,9 @@ tenderonline.Активувати другий етап
   tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
 #  Input Text  xpath=(//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lots_marker"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")])[1]  ${field_value}
-  Input Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="lot"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")]  ${field_value}
+#  Run Keyword If  '${mode}' == 'open_framework'  Input Text  xpath=//*[contains(text(),"${lot_id}")]/ancestor::div[@class="lot"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")]  ${field_value}
+#  ...  ELSE  Input Text  xpath=(//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lots_marker"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")])[1]  ${field_value}
+  Input Text  xpath=(//input[contains(@value,"${lot_id}")]/ancestor::div[@class="lots_marker"]/descendant::*[contains(@name,"${field_name.replace(".", "][")}")])[1]  ${field_value}
   Дочекатися І Клікнути  xpath=//button[contains(@class,'btn_submit_form')]
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//div[contains(@class, "alert-success")]
 
