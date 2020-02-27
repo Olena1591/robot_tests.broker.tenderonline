@@ -792,9 +792,9 @@ tenderonline.Активувати другий етап
   Дочекатися І Клікнути  xpath=//button[contains(text(),"Оголосити відбір для закупівлі")]
   Wait Element Animation  xpath=//div[@class="modal-content"]/descendant::button[contains(text(),"Оголосити відбір для закупівлі за рамковою угодою")]
   Дочекатися І Клікнути  xpath=//div[@class="modal-content"]/descendant::button[contains(text(),"Оголосити відбір для закупівлі за рамковою угодою")]
+  Wait Until Keyword Succeeds  10 x  2 s  Element Should Be Visible  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Дочекатися І Клікнути  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
-  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
-  Click button  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
+#  Click button  xpath=//button[@class="mk-btn mk-btn_accept btn_submit_form"]
   Wait Until Keyword Succeeds  5 x  1s  Run Keywords
   ...  Element Should Be Visible  xpath=//*[contains(@href,"tender/json/")]
   ...  AND  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
@@ -1501,10 +1501,13 @@ Get Info From Complaints
 #  ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
 ##  ...  ELSE IF  'addend' in '${field_name}'  Get Text  xpath=//div[@class="panel-body"]
 #  ...  ELSE  Get Text  xpath=//*[@data-test-id="${field_name}"]
-  ${value}=  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
+  ${value}=  Run Keyword If  'factor' in '${field_name}'
+  ...  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index}]
+  ...  ELSE  Get Text  xpath=(//*[@data-test-id="${field_name}"])[${index + 1}]
   ${value}=  Run Keyword If  "addend" in "${field_name}"  Convert To Number  ${value}
   ...  ELSE IF  "factor" in "${field_name}"  Convert To Number  ${value}
   ...  ELSE  Set Variable  ${value}
+  ${value}=  convert_string_from_dict_tenderonline   ${value}
   [Return]  ${value}
 
 
@@ -2038,7 +2041,9 @@ tenderonline.Пошук угоди по ідентифікатору
   ...  AND  Wait Until Page Contains Element  xpath=//button[contains(@class, "sign_btn mk-btn mk-btn_default") and contains(text(),"Накласти ЕЦП/КЕП")]
   Накласти ЄЦП  ${False}
   Wait Until Keyword Succeeds  10 x  1 s  Page Should Contain Element  xpath=//button[contains(text(),"Оголосити відбір для закупівлі")]
-
+  Wait Until Keyword Succeeds  30 x  5 s  Run Keywords
+  ...  Force Agreement Synchronization  ${url}
+  ...  AND  Wait Until Page Contains Element  xpath=//button[contains(text(),"Оголосити відбір для закупівлі")]
 
 ###############################################################################################################
 ##############################################    АУКЦІОН    ##################################################
