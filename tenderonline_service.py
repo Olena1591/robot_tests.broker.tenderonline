@@ -192,11 +192,17 @@ def adapt_view_tender_data(value, field_name):
     return convert_string_from_dict_tenderonline(value)
 
 
+def adapt_view_agreement_data(value, field_name):
+    if 'factor' in field_name:
+        value = float((value + 1) / 10, 2)
+    return convert_string_from_dict_tenderonline(value)
+
+
 def adapt_view_lot_data(value, field_name):
     if 'value.amount' in field_name:
         value = float(value.replace(' ', ''))
-    elif 'minimalStep.currency' in field_name:
-        value = value.split(' ')[-1]
+    # elif 'minimalStep.currency' in field_name:
+    #     value = value.split(' ')[-1]
     # elif 'currency' in field_name:
     #     value = value.split(' ')[-4]
     # elif 'valueAddedTaxIncluded' in field_name:
