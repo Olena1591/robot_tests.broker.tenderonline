@@ -1256,6 +1256,7 @@ tenderonline.Створити скаргу про виправлення виз�
   ...  ELSE IF  '${field_name}' == 'lots[0].yearlyPaymentsPercentageRange'  Get Text  xpath=//*[@data-test-id="yearlyPaymentsPercentageRange"]
   ...  ELSE IF  '${field_name}' == 'lots[0].value.amount'  Get Text  xpath=//*[@data-test-id="lots.value.amount"]
   ...  ELSE IF  '${field_name}' == 'lots[0].minimalStep.amount'  Get Text  xpath=//*[@data-test-id="lots.minimalStep.amount"]
+  ...  ELSE IF  '${field_name}' == 'lots[0].title' and '${mode}' == 'framework_selection'  Get Text  xpath=//*[@data-test-id="lots.title"]
   ...  ELSE IF   "stones" in "${field_name}"  Get Info From Tender Milestones  ${field_name}
   ...  ELSE IF   "fundingKind" in "${field_name}"  Get Text  xpath=//*[@data-test-id="fundingKind"]
   ...  ELSE IF   "clarificationsUntil" in "${field_name}"  Get Text  xpath=//*[@data-test-id="clarificationsUntil"]
