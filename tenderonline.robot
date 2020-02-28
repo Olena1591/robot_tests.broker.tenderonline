@@ -30,7 +30,6 @@ ${locator.plan.tender.procurementMethodType}=  xpath=//*[@data-test-id="procurem
 #  ${prefs} =    Create Dictionary    download.default_directory=${downloadDir}
   Call Method    ${chromeOptions}    add_argument    --headless
 
-
   Create Webdriver    ${USERS.users['${username}'].browser}  alias=${username}   chrome_options=${chromeOptions}
 #  Open Browser  ${USERS.users['${username}'].homepage}  ${USERS.users['${username}'].browser}  alias=${username}  desired_capabilities= ${chromeOptions}
   Set Window Size  1024  10000
@@ -798,7 +797,7 @@ tenderonline.Активувати другий етап
   Wait Until Keyword Succeeds  5 x  1s  Run Keywords
   ...  Element Should Be Visible  xpath=//*[contains(@href,"tender/json/")]
   ...  AND  Дочекатися І Клікнути  xpath=//*[contains(@href,"tender/json/")]
-  ...  AND  Wait Until Element Is Visible  xpath=//*[@data-test-id="tenderID"]  10
+  ...  AND  Wait Until Element Is Visible  xpath=//*[@data-test-id="tenderID"]  5
   ${tender_uaid}=  Get Text  xpath=//*[@data-test-id="tenderID"]
   [Return]  ${tender_uaid}
 
@@ -807,9 +806,10 @@ tenderonline.Активувати другий етап
   [Arguments]  ${username}  ${tenderID}  ${field_name}  ${field_value}
   ${field_value}=  Run Keyword If  "amount" in "${field_name}"  add_second_sign_after_point  ${field_value}
   ...  ELSE  Set Variable  ${field_value}
-  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tenderID}
+  Run Keyword If  '${mode}' != 'framework_selection'  tenderonline.Пошук тендера по ідентифікатору  ${username}  ${tenderID}
   Дочекатися І Клікнути  xpath=//a[contains(text(),'Редагувати')]
   Run Keyword If  "Date" in "${field_name}"  Input Date  name="Tender[${field_name.replace(".", "][")}]"  ${field_value}
+  ...  ELSE IF  'items[0].quantity' in '${field_name}' and '${mode}' == 'framework_selection'  ConvToStr And Input Text  xpath=//input[@id="item-0-quantity"]  ${field_value}
   ...  ELSE  Input text  name=Tender[${field_name}]  ${field_value}
   Дочекатися І Клікнути  xpath=//button[contains(@class,'btn_submit_form')]
   Wait Until Page Contains Element  xpath=//div[contains(@class, "alert-success")]

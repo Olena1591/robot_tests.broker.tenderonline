@@ -194,7 +194,7 @@ def adapt_view_tender_data(value, field_name):
 
 def adapt_view_agreement_data(value, field_name):
     if 'factor' in field_name:
-        value = float((value + 1) / 10, 2)
+        value = round(float((value + 1) / 10, 1))
     return convert_string_from_dict_tenderonline(value)
 
 
