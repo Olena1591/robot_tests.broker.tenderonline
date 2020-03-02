@@ -121,6 +121,13 @@ def convert_string_from_dict_tenderonline(string):
         u'відкликано скаржником': u'stopping',
         u'Без ответа': u'ignored',
         u'Укладена Рамкова угода': u'complete',
+        u'Період запрошення': u'active.enquiries',
+        u'Підтверджена зміна': u'active',
+        u'Скасована зміна': u'cancelled',
+        u'Зміна ціни у зв’язку із зміною ставок податків і зборів': u'taxRate',
+        u'Зміна сторонніх показників (курсу, тарифів...)': u'thirdParty',
+        u'Припинення участі у рамковій угоді учасника': u'partyWithdrawal',
+        u'Зміна ціни за одиницю товару (у звʼязку з коливання ціни на ринку)': u'itemPriceVariation',
     }.get(string, string)
 
 
@@ -185,17 +192,23 @@ def adapt_view_tender_data(value, field_name):
     return convert_string_from_dict_tenderonline(value)
 
 
+def adapt_view_agreement_data(value, field_name):
+    if 'factor' in field_name:
+        value = round(float((value + 1) / 10, 1))
+    return convert_string_from_dict_tenderonline(value)
+
+
 def adapt_view_lot_data(value, field_name):
     if 'value.amount' in field_name:
-        value = float("".join(value.split(' ')[:-4]))
-    elif 'minimalStep.currency' in field_name:
-        value = value.split(' ')[-1]
-    elif 'currency' in field_name:
-        value = value.split(' ')[-4]
-    elif 'valueAddedTaxIncluded' in field_name:
-        value = ' '.join(value.split(' ')[-3:]).strip()
+        value = float(value.replace(' ', ''))
+    # elif 'minimalStep.currency' in field_name:
+    #     value = value.split(' ')[-1]
+    # elif 'currency' in field_name:
+    #     value = value.split(' ')[-4]
+    # elif 'valueAddedTaxIncluded' in field_name:
+    #     value = ' '.join(value.split(' ')[-3:]).strip()
     elif 'minimalStep.amount' in field_name:
-        value = float("".join(value.split(' ')[:-1]))
+        value = float(value.replace(' ', ''))
     elif 'Date' in field_name:
         value = convert_time(value)
     return convert_string_from_dict_tenderonline(value)
@@ -248,3 +261,9 @@ def retrieve_qaulifications_range(internal_id):
     for index in range(len(data['data']['qualifications'])):
         lst.append(get_company_name_by_bid_id(data['data']['qualifications'][index]['bidID'], data))
     return lst
+
+
+def retrive_agreement_id(internal_agreement_id):
+    resp_data = requests.get("https://lb-api-staging.prozorro.gov.ua/api/2.4/agreements/{}".format(internal_agreement_id))
+    return json.loads(resp_data.content)['data']['agreementID']
+
